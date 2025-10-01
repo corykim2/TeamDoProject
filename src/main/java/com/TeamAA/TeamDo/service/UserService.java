@@ -16,7 +16,7 @@ public class UserService {
     }
 
     // 신규 회원가입
-    public User register(User user) {
+    public User signUp(User user) {
 
         //아이디 중복 확인
         if(userRepository.existsById(user.getId())) {
