@@ -5,9 +5,10 @@ import java.util.Optional;
 import com.TeamAA.TeamDo.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    // 아이디로 사용자 조회
-    Optional<User> findByEmail(String id);
+    // 아이디 중복체크
+    boolean existsById(String id);
 
     // 이메일 중복 체크
     boolean existsByEmail(String email);
+
 }
