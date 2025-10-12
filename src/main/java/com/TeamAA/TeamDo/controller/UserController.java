@@ -3,6 +3,7 @@ package com.TeamAA.TeamDo.controller;
 import com.TeamAA.TeamDo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.TeamAA.TeamDo.entity.User;
 
@@ -24,12 +25,14 @@ public class UserController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signup(@ModelAttribute User user) {
+    public String signup(@ModelAttribute User user, Model model) {
         try {
             userService.signUp(user);
-            return "redirect:/success"; // 성공 시 이동
+            return "redirect:/success";
         } catch (IllegalArgumentException e) {
-            return "redirect:/signup?error"; // 실패 시 에러 표시
+            // 서비스에서 발생한 에러 메시지를 그대로 전달
+            model.addAttribute("errorMessage", e.getMessage());
+            return "signup";
         }
     }
 

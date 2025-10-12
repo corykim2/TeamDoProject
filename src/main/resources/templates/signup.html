@@ -8,8 +8,8 @@
 <h1>회원가입</h1>
 
 <!-- 에러 메시지 표시 -->
-<div th:if="${param.error}">
-    <p style="color:red;">이미 사용 중인 아이디 이거나 사용 중인 이메일입니다.</p>
+<div th:if="${errorMessage}">
+    <p style="color:red;" th:text="${errorMessage}"></p>
 </div>
 
 <form th:action="@{/signup}" method="post">
