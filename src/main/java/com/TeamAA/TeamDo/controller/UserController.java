@@ -43,7 +43,7 @@ public class UserController {
     }
 
     // 아이디로 유저 조회 (API)
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     @ResponseBody
     public User getUser(@PathVariable String id) {
         return userService.findById(id); // 나중에 findById 구현 필요
