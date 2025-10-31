@@ -68,11 +68,10 @@ class UserServiceTest {
         when(userRepository.findById("test")).thenReturn(Optional.of(user));
 
         // when
-        User result = userService.findById("test"); // ID로 조회
-        boolean passwordMatches = result != null && result.getPassword().equals("1234"); // 비밀번호 확인
+        User result = userService.login("test", "1234"); //로그인 호출
 
         // then
         assertNotNull(result);
-        assertTrue(passwordMatches); // 비밀번호 일치 확인
+        assertEquals("test", result.getPassword()); // 비밀번호 일치 확인
     }
 }
