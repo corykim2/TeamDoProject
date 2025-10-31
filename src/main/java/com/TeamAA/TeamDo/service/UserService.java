@@ -37,4 +37,12 @@ public class UserService {
         return userRepository.findById(id)
                 .orElse(null);
     }
+
+    public User login(String id, String password) {
+        User user = userRepository.findById(id).orElse(null); // 아이디 조회
+        if (user != null && user.getPassword().equals(password)) { // 비밀번호 검증
+            return user;
+        }
+        return null; // 아이디 없거나 비밀번호 불일치
+    }
 }
