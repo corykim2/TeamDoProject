@@ -38,7 +38,7 @@ class UserServiceTest {
 
 
         // when: findById() 실행
-            User result = userService.findById("test" );
+            User result = userService.findById("test");
 
         // then: findById() 검증
             assertNotNull(result);// null 아님 확인
@@ -56,5 +56,23 @@ class UserServiceTest {
 
         // then
         assertNull(result);
+    }
+
+    @Test
+    @DisplayName("로그인: 아이디 확인 후 비밀번호 일치 검증")
+    void login_아이디확인후비밀번호일치() {
+        // given
+        User user = new User();
+        user.setId("test");
+        user.setPassword("1234");
+        when(userRepository.findById("test")).thenReturn(Optional.of(user));
+
+        // when
+        User result = userService.findById("test"); // ID로 조회
+        boolean passwordMatches = result != null && result.getPassword().equals("1234"); // 비밀번호 확인
+
+        // then
+        assertNotNull(result);
+        assertTrue(passwordMatches); // 비밀번호 일치 확인
     }
 }
