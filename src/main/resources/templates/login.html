@@ -18,7 +18,13 @@
   </div>
   <div>
     <button type="submit">로그인</button>
+
+    <a th:href="@{/signup}">
+      <button type="button">회원가입</button>
+    </a>
   </div>
+
+
 
   <div th:if="${param.error}">
     <p style="color:red;">아이디 또는 비밀번호가 일치하지 않습니다.</p>
