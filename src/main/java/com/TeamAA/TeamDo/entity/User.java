@@ -29,6 +29,19 @@ public class User {
     @Column(nullable = false)
     private boolean withdrawn = false; // 회원 탈퇴 여부, 기본 false
 
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+
     // 기본 생성자
     public User() {}
 
