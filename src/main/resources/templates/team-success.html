@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>팀 생성 완료</title>
+</head>
+<body>
+<h1>팀 생성 완료</h1>
+<p>팀 이름: <span th:text="${team.name}"></span></p>
+<p>팀 ID: <span th:text="${team.id}"></span></p>
+<a href="/teams/create">다시 생성</a>
+</body>
+</html>
