@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.entity.Team;
-import com.TeamAA.TeamDo.entity.User;
+import com.TeamAA.TeamDo.entity.TeamEntity;
+import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.repository.TeamRepository;
 import com.TeamAA.TeamDo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,23 +20,23 @@ public class TeamService {
     }
 
     // 팀 생성
-    public Team createTeam(String name) {
-        Team team = new Team(name);
-        return teamRepository.save(team);
+    public TeamEntity createTeam(String name) {
+        TeamEntity teamEntity = new TeamEntity(name);
+        return teamRepository.save(teamEntity);
     }
 
     // 팀 조회
-    public Team getTeam(Long id) {
+    public TeamEntity getTeam(Long id) {
         return teamRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("팀을 찾을 수 없습니다."));
     }
 
     // 팀원 추가
-    public User addMemberToTeam(String userId, Long teamId) {
-        User user = userRepository.findById(userId)
+    public UserEntity addMemberToTeam(String userId, Long teamId) {
+        UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
-        Team team = getTeam(teamId);
-        user.setTeam(team);
-        return userRepository.save(user);
+        TeamEntity teamEntity = getTeam(teamId);
+        userEntity.setTeamEntity(teamEntity);
+        return userRepository.save(userEntity);
     }
 }

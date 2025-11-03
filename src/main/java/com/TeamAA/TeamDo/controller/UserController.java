@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.TeamAA.TeamDo.entity.User;
+import com.TeamAA.TeamDo.entity.UserEntity;
 
 @Controller
 public class UserController {
@@ -25,9 +25,9 @@ public class UserController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signup(@ModelAttribute User user, Model model) {
+    public String signup(@ModelAttribute UserEntity userEntity, Model model) {
         try {
-            userService.signUp(user);
+            userService.signUp(userEntity);
             return "redirect:/success";
         } catch (IllegalArgumentException e) {
             // 서비스에서 발생한 에러 메시지를 그대로 전달
@@ -45,7 +45,7 @@ public class UserController {
     // 아이디로 유저 조회 (API)
     @GetMapping("/user/{id}")
     @ResponseBody
-    public User getUser(@PathVariable String id) {
+    public UserEntity getUser(@PathVariable String id) {
         return userService.findById(id); // 나중에 findById 구현 필요
     }
 }

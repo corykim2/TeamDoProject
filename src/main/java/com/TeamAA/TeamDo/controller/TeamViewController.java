@@ -1,6 +1,6 @@
 package com.TeamAA.TeamDo.controller;
 
-import com.TeamAA.TeamDo.entity.Team;
+import com.TeamAA.TeamDo.entity.TeamEntity;
 import com.TeamAA.TeamDo.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,8 +23,8 @@ public class TeamViewController {
     // 팀 생성 처리
     @PostMapping("/create")
     public String createTeam(@RequestParam String name, Model model) {
-        Team team = teamService.createTeam(name);
-        model.addAttribute("team", team);
+        TeamEntity teamEntity = teamService.createTeam(name);
+        model.addAttribute("team", teamEntity);
         return "team-success"; // 생성 후 성공 페이지
     }
 }

@@ -1,8 +1,10 @@
 package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity // 이 클래스가 JPA 엔티티임을 나타냅니다.
 @Setter
@@ -16,8 +18,11 @@ public class TodoEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pNo", nullable = false)
-    private Project project;
+    private ProjectEntity projectEntity;
 
+    @CreationTimestamp
+    @Column(updatable = false) //이 조건으로 업데이트시에는 아래거가 아래 옵션으로 insert 시에는 위에거가 사용되도록 함
+    private LocalDateTime createdTime;
 
     @Column(name = "priority", nullable = false)
     private Integer priority; // priority INT NOT NULL
@@ -30,11 +35,12 @@ public class TodoEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "managerId", nullable = false)
-    private User managerId; // User 엔티티가 'users' 테이블에 매핑된다고 가정
-
+    private UserEntity managerId; // User 엔티티가 'users' 테이블에 매핑된다고 가정
 
     @Column(name = "name", length = 64, nullable = false)
     private String name; // 할 일 이름 (name VARCHAR(64) NOT NULL)
+
+
 
 
 }

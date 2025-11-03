@@ -1,6 +1,6 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.entity.User;
+import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserServiceTest {
+class UserEntityServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -32,13 +32,13 @@ class UserServiceTest {
     void findById_존재하는아이디() {
 
         // given: 유저를 Mock 설정
-            User user = new User();
-            user.setId("test");
-            when(userRepository.findById("test")).thenReturn(Optional.of(user));
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId("test");
+            when(userRepository.findById("test")).thenReturn(Optional.of(userEntity));
 
 
         // when: findById() 실행
-            User result = userService.findById("test");
+            UserEntity result = userService.findById("test");
 
         // then: findById() 검증
             assertNotNull(result);// null 아님 확인
@@ -52,7 +52,7 @@ class UserServiceTest {
         when(userRepository.findById("unknown")).thenReturn(Optional.empty());
 
         // when
-        User result = userService.findById("unknown");
+        UserEntity result = userService.findById("unknown");
 
         // then
         assertNull(result);
@@ -62,13 +62,13 @@ class UserServiceTest {
     @DisplayName("로그인: 아이디 확인 후 비밀번호 일치 검증")
     void login_아이디확인후비밀번호일치() {
         // given
-        User user = new User();
-        user.setId("test");
-        user.setPassword("1234");
-        when(userRepository.findById("test")).thenReturn(Optional.of(user));
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId("test");
+        userEntity.setPassword("1234");
+        when(userRepository.findById("test")).thenReturn(Optional.of(userEntity));
 
         // when
-        User result = userService.login("test", "1234"); //로그인 호출
+        UserEntity result = userService.login("test", "1234"); //로그인 호출
 
         // then
         assertNotNull(result);
