@@ -26,12 +26,9 @@ public class TeamEntity {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<UserEntity> members = new ArrayList<>();
+    @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProjectEntity> projectEntityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProjectEntity> teamCodeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<TeamPaticipatingEntity> teamId = new ArrayList<>();
+    @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TeamPaticipatingEntity> teamPaticipatingEntityList = new ArrayList<>();
 }

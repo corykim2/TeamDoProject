@@ -1,0 +1,24 @@
+# 서버 포트 설정
+server:
+  port: 8082
+
+# database 연동 설정
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://서버아이피:3306/데이터베이스명
+    username: USER-NAME
+    password: YOUR-SECRET-PASSWORD
+  thymeleaf:
+    cache: false #html 템플릿을 매번 다시 읽어오게 함(수정하면 서버가 켜져있어도 반영) -> 나중에 운영시에는 true로 바꿔야 한다네
+
+  # spring data jpa 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    show-sql: true #콘솔에 SQL 출력
+    hibernate:
+      ddl-auto: create #처음 생성할 떄만 create로 해주면 댐. 다음부터는 update
+    properties:
+      hibernate:
+        format_sql: true # SQL 보기 좋게 포맷팅

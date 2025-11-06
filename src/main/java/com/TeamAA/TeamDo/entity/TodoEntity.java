@@ -35,7 +35,7 @@ public class TodoEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "managerId", nullable = false)
-    private UserEntity managerId; // User 엔티티가 'users' 테이블에 매핑된다고 가정
+    private UserEntity userEntity;
 
     @Column(name = "name", length = 64, nullable = false)
     private String name; // 할 일 이름 (name VARCHAR(64) NOT NULL)

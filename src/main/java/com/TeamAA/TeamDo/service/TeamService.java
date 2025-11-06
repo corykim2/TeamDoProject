@@ -21,7 +21,8 @@ public class TeamService {
 
     // 팀 생성
     public TeamEntity createTeam(String name) {
-        TeamEntity teamEntity = new TeamEntity(name);
+        TeamEntity teamEntity = new TeamEntity();
+        teamEntity.setName(name);
         return teamRepository.save(teamEntity);
     }
 
@@ -32,6 +33,7 @@ public class TeamService {
     }
 
     // 팀원 추가
+    /*
     public UserEntity addMemberToTeam(String userId, Long teamId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
@@ -39,4 +41,6 @@ public class TeamService {
         userEntity.setTeamEntity(teamEntity);
         return userRepository.save(userEntity);
     }
+    */
+    //TODO 조민성 이거 나중에 TeamParticipatingEntity로 들어가게 고치셈. 뭔가 잘못됨.
 }

@@ -15,9 +15,9 @@ public class TeamPaticipatingEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
-    private UserEntity userId;
+    private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamId", nullable = false)
-    private TeamEntity teamId;
+    private TeamEntity teamEntity;
 }

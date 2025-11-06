@@ -30,8 +30,10 @@ public class TeamController {
     }
 
     // 팀원 추가
+    /*
     @PostMapping("/{teamId}/members")
     public UserEntity addMember(@PathVariable Long teamId, @RequestBody AddMemberRequest request) {
         return teamService.addMemberToTeam(request.getUserId(), teamId);
     }
+     */
 }

@@ -30,13 +30,13 @@ public class ProjectEntity {
 
     @ManyToOne(fetch = FetchType.LAZY) //정보가 필요할 때만 쿼리로 가져옴
     @JoinColumn(name = "team_code", nullable = false)
-    private TeamEntity teamEntityCode; // 팀 코드
+    private TeamEntity teamEntity; // 팀 코드
 
     @ManyToOne(fetch = FetchType.LAZY) //정보가 필요할 때만 쿼리로 가져옴
     @JoinColumn(name = "userId", nullable = false)
-    private UserEntity userEntityId; // 팀 코드
+    private UserEntity userEntity; // 팀 코드
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TodoEntity> TodoEntityList = new ArrayList<>();
 
 }
