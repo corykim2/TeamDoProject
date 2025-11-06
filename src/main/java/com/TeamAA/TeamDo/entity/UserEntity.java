@@ -30,9 +30,6 @@ public class UserEntity {
     @Column(length = 20, nullable = false)
     private String name; // 이름
 
-    @Column(length = 20)
-    private String organization; // 소속기관 (nullable)
-
     @Column(nullable = false)
     private boolean withdrawn = false; // 회원 탈퇴 여부, 기본 false
 
@@ -49,12 +46,11 @@ public class UserEntity {
     public UserEntity() {}
 
     // 전체 생성자
-    public UserEntity(String id, String email, String password, String name, String organization, boolean withdrawn) {
+    public UserEntity(String id, String email, String password, String name, boolean withdrawn) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
-        this.organization = organization;
         this.withdrawn = withdrawn;
     }
 }

@@ -1,15 +1,20 @@
 package com.TeamAA.TeamDo.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.TeamAA.TeamDo.dto.LoginRequest;
+import com.TeamAA.TeamDo.dto.LoginResponse;
+import com.TeamAA.TeamDo.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class LoginController {
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
+    @Autowired
+    private LoginService loginService;
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        return loginService.login(request);
     }
 }
