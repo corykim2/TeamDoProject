@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "team_participating", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"userId", "teamId"})
-})
+@Entity
+@Table(name = "team_participating")
 public class TeamParticipatingEntity {
 
     @Id
@@ -24,4 +22,3 @@ public class TeamParticipatingEntity {
     @JoinColumn(name = "teamId", nullable = false)
     private TeamEntity teamEntity;
 }
-

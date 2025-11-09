@@ -9,6 +9,8 @@ import com.TeamAA.TeamDo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @Transactional
 public class TeamService {
@@ -23,35 +25,22 @@ public class TeamService {
         this.teamParticipatingRepository = teamParticipatingRepository;
     }
 
-    // 팀 생성
+    // ✅ 팀 생성
     public TeamEntity createTeam(String name) {
         TeamEntity team = new TeamEntity();
         team.setName(name);
         return teamRepository.save(team);
     }
 
-    // 팀 조회
-    public TeamEntity getTeam(Long id) {
-        return teamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("팀을 찾을 수 없습니다."));
-    }
-
-    // 팀 상세정보 조회
-    public TeamEntity getTeamWithMembers(Long teamId) {
-        TeamEntity team = getTeam(teamId);
-        team.getTeamParticipatingEntityList().size(); // LAZY 초기화
-        return team;
-    }
-
-    // 팀원 초대
-    public TeamParticipatingEntity addMemberToTeam(String userId, Long teamId) {
+    // ✅ 초대코드로 팀 참가
+    public TeamParticipatingEntity joinTeamByInviteCode(String userId, String inviteCode) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
-        TeamEntity team = getTeam(teamId);
+        TeamEntity team = teamRepository.findByInviteCode(inviteCode)
+                .orElseThrow(() -> new RuntimeException("유효하지 않은 초대코드입니다."));
 
-        if (teamParticipatingRepository.existsByUserEntityAndTeamEntity(user, team)) {
-            throw new RuntimeException("이미 팀에 참여중인 유저입니다.");
-        }
+        boolean exists = teamParticipatingRepository.existsByUserEntityAndTeamEntity(user, team);
+        if (exists) throw new RuntimeException("이미 팀에 참여중입니다.");
 
         TeamParticipatingEntity participation = new TeamParticipatingEntity();
         participation.setUserEntity(user);
@@ -60,16 +49,26 @@ public class TeamService {
         return teamParticipatingRepository.save(participation);
     }
 
-    // 팀 나가기
+    // ✅ 팀 상세정보 조회
+    public TeamEntity getTeamDetail(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("팀을 찾을 수 없습니다."));
+    }
+
+    // ✅ 초대코드 재발급
+    public String regenerateInviteCode(Long teamId) {
+        TeamEntity team = getTeamDetail(teamId);
+        team.setInviteCode(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        teamRepository.save(team);
+        return team.getInviteCode();
+    }
+
+    // ✅ 팀 나가기
     public void leaveTeam(String userId, Long teamId) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
-        TeamEntity team = getTeam(teamId);
+        TeamEntity team = getTeamDetail(teamId);
 
-        TeamParticipatingEntity participation = teamParticipatingRepository
-                .findByUserEntityAndTeamEntity(user, team)
-                .orElseThrow(() -> new RuntimeException("팀 참여 정보를 찾을 수 없습니다."));
-
-        teamParticipatingRepository.delete(participation);
+        teamParticipatingRepository.deleteByUserEntityAndTeamEntity(user, team);
     }
 }
