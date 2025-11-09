@@ -20,7 +20,7 @@ public class TeamEntity {
     private Long id;
 
     @CreationTimestamp
-    @Column(updatable = false) //이 조건으로 업데이트시에는 아래거가 아래 옵션으로 insert 시에는 위에거가 사용되도록 함
+    @Column(updatable = false)
     private LocalDateTime createdTime;
 
     @Column(length = 50, nullable = false)
@@ -30,5 +30,5 @@ public class TeamEntity {
     private List<ProjectEntity> projectEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<TeamPaticipatingEntity> teamPaticipatingEntityList = new ArrayList<>();
+    private List<TeamParticipatingEntity> teamParticipatingEntityList = new ArrayList<>();
 }
