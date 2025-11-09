@@ -43,7 +43,7 @@ public class UserEntity {
     private List<ProjectEntity> projectEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<TeamPaticipatingEntity> teamPaticipatingEntityList = new ArrayList<>();
+    private List<TeamParticipatingEntity> teamParticipatingEntityList = new ArrayList<>();
 
     // 기본 생성자
     public UserEntity() {}
