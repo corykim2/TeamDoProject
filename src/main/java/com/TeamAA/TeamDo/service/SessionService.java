@@ -21,7 +21,7 @@ public class SessionService {
     public SessionEntity createSession(UserEntity userEntity) {
         String sessionId = UUID.randomUUID().toString();
         Timestamp now = Timestamp.from(Instant.now());
-        Timestamp expires = Timestamp.from(Instant.now().plusSeconds(60 * 60 * 24)); // 24시간 유효
+        Timestamp expires = Timestamp.from(Instant.now().plusSeconds(60 * 30)); // 24시간 유효
 
         SessionEntity session = new SessionEntity(sessionId, userEntity, now, expires);
         return sessionRepository.save(session);
