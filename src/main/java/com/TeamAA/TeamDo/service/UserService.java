@@ -32,4 +32,13 @@ public class UserService {
     public UserEntity findById(String id) {
         return userRepository.findById(id).orElse(null);
     }
-}
+    public UserEntity login(String id, String rawPassword) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return user;
+}}
