@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "team")
-public class TeamPaticipatingEntity {
+@Table(name = "team_participating", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"userId", "teamId"})
+})
+public class TeamParticipatingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,3 +24,4 @@ public class TeamPaticipatingEntity {
     @JoinColumn(name = "teamId", nullable = false)
     private TeamEntity teamEntity;
 }
+
