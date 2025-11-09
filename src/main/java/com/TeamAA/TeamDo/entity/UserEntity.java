@@ -3,12 +3,19 @@ package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email") // 이메일 유니크 제약
 })
-public class User {
+public class UserEntity {
 
     @Id
     @Column(length = 30, nullable = false, updatable = false)
@@ -29,59 +36,25 @@ public class User {
     @Column(nullable = false)
     private boolean withdrawn = false; // 회원 탈퇴 여부, 기본 false
 
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TodoEntity> TodoEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProjectEntity> projectEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TeamPaticipatingEntity> teamPaticipatingEntityList = new ArrayList<>();
+
     // 기본 생성자
-    public User() {}
+    public UserEntity() {}
 
     // 전체 생성자
-    public User(String id, String email, String password, String name, String organization, boolean withdrawn) {
+    public UserEntity(String id, String email, String password, String name, String organization, boolean withdrawn) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.organization = organization;
-        this.withdrawn = withdrawn;
-    }
-
-    // Getter & Setter
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOrganization() {
-        return organization;
-    }
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
-
-    public boolean isWithdrawn() {
-        return withdrawn;
-    }
-    public void setWithdrawn(boolean withdrawn) {
         this.withdrawn = withdrawn;
     }
 }
