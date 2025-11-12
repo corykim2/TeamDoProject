@@ -46,4 +46,16 @@ public class SessionService {
     public void deleteSessionByUserId(String userId) {
         sessionRepository.deleteByUserEntity_Id(userId);
     }
+    //세션 검증 
+    public UserEntity validateAndGetUser(String sessionId) {
+        SessionEntity session = sessionRepository.findBySessionId(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 세션입니다. 다시 로그인해주세요."));
+
+        UserEntity user = session.getUserEntity();
+        if (user == null) {
+            throw new IllegalArgumentException("세션에 연결된 사용자를 찾을 수 없습니다.");
+        }
+
+        return user;
+    }
 }

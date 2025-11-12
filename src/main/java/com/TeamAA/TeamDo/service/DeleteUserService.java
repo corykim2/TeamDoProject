@@ -20,14 +20,8 @@ public class DeleteUserService {
 
     @Transactional
     public void deleteUser(String sessionId, String password) {
-        // 세션 검증
-        SessionEntity session = sessionService.getSession(sessionId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 세션입니다. 다시 로그인해주세요."));
-
-        UserEntity user = session.getUserEntity();
-        if (user == null) {
-            throw new IllegalArgumentException("세션에 연결된 사용자를 찾을 수 없습니다.");
-        }
+        // 세션 검증 + 유저 조회
+        UserEntity user = sessionService.validateAndGetUser(sessionId);
 
         // 비밀번호 검증
         if (!user.getPassword().equals(password)) {
