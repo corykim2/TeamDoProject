@@ -1,23 +1,24 @@
 package com.TeamAA.TeamDo.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.TeamAA.TeamDo.service.SessionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class LogoutController {
 
+    @Autowired
+    private SessionService sessionService;
+
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // 세션이 없으면 null 반환
-        if (session != null) {
-            session.invalidate();
-            return "로그아웃 완료";
+    public String logout(@RequestHeader("Session-Id") String sessionId) {
+        boolean deleted = sessionService.deleteSessionBySessionId(sessionId);
+
+        if (deleted) {
+            return "로그아웃 완료 (DB 세션 삭제)";
         } else {
-            return "세션이 존재하지 않습니다.";
+            return "유효하지 않은 세션입니다.";
         }
     }
 }

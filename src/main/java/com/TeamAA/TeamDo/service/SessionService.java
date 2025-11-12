@@ -21,7 +21,7 @@ public class SessionService {
     public SessionEntity createSession(UserEntity userEntity) {
         String sessionId = UUID.randomUUID().toString();
         Timestamp now = Timestamp.from(Instant.now());
-        Timestamp expires = Timestamp.from(Instant.now().plusSeconds(60 * 30)); // 24시간 유효
+        Timestamp expires = Timestamp.from(Instant.now().plusSeconds(60 * 30)); // 30분 유효
 
         SessionEntity session = new SessionEntity(sessionId, userEntity, now, expires);
         return sessionRepository.save(session);
@@ -32,7 +32,17 @@ public class SessionService {
         return sessionRepository.findBySessionId(sessionId);
     }
 
-    // 세션 삭제
+    // 세션 삭제 (SessionId 기준)
+    public boolean deleteSessionBySessionId(String sessionId) {
+        Optional<SessionEntity> sessionOpt = sessionRepository.findBySessionId(sessionId);
+        if (sessionOpt.isPresent()) {
+            sessionRepository.delete(sessionOpt.get());
+            return true;
+        }
+        return false;
+    }
+
+    // id 검색후 삭제
     public void deleteSessionByUserId(String userId) {
         sessionRepository.deleteByUserEntity_Id(userId);
     }
