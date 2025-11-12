@@ -6,7 +6,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ProjectCreateRequestDto {
-    // 1. 생성 시 사용자에게 받을 데이터
-    private String pname;
-    private String teamCode;
+    private String pname; // 프로젝트명
+
+    // "teamId" (PK)를 받음
+    private Long teamId;
+
+    // "userEntity"를 연결하기 위한 "userId" (PK)를 받음
+    private String  userId;
 }
