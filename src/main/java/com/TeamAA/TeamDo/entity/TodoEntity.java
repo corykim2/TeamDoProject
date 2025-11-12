@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,6 +26,7 @@ public class TodoEntity {
     private LocalDateTime createdTime;
 
     @Column(name = "priority", nullable = false)
+    @Size(min = 1, max = 5)
     private Integer priority; // priority INT NOT NULL
 
     @Column(name = "state", length = 64, nullable = false)
