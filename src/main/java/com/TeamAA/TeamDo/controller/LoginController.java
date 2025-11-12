@@ -21,17 +21,8 @@ public class LoginController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
+
         // 사용자 인증
-        LoginResponse response = loginService.login(request);
-
-        // DB 세션 생성
-        UserEntity user = new UserEntity();
-        user.setId(response.getUserId());
-        SessionEntity session = sessionService.createSession(user);
-
-        // 세션 ID를 응답으로 반환
-        response.setSessionId(session.getSessionId());
-
-        return response;
+        return loginService.login(request);
     }
 }

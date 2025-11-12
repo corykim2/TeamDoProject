@@ -20,7 +20,7 @@ class UserEntityServiceTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService;
+    private SignupService signupService;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +38,7 @@ class UserEntityServiceTest {
 
 
         // when: findById() 실행
-            UserEntity result = userService.findById("test");
+            UserEntity result = signupService.findById("test");
 
         // then: findById() 검증
             assertNotNull(result);// null 아님 확인
@@ -52,7 +52,7 @@ class UserEntityServiceTest {
         when(userRepository.findById("unknown")).thenReturn(Optional.empty());
 
         // when
-        UserEntity result = userService.findById("unknown");
+        UserEntity result = signupService.findById("unknown");
 
         // then
         assertNull(result);
@@ -68,7 +68,7 @@ class UserEntityServiceTest {
         when(userRepository.findById("test")).thenReturn(Optional.of(userEntity));
 
         // when
-        UserEntity result = userService.login("test", "1234"); //로그인 호출
+        UserEntity result = signupService.login("test", "1234"); //로그인 호출
 
         // then
         assertNotNull(result);

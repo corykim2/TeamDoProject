@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     @Autowired
-    private UserService userService;
+    private SignupService signupService;
 
     @Autowired
     private SessionService sessionService;
 
     public LoginResponse login(LoginRequest request) {
         //사용자 조회
-        UserEntity user = userService.findById(request.getId());
+        UserEntity user = signupService.findById(request.getId());
         if (user == null) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
         }
