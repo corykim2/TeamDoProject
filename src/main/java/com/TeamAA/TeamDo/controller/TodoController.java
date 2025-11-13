@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.controller;
 
+import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
 import com.TeamAA.TeamDo.entity.TodoEntity;
 import com.TeamAA.TeamDo.service.TodoService;
 import lombok.RequiredArgsConstructor;
@@ -44,10 +45,29 @@ public class TodoController {
         TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState);
         return ResponseEntity.ok(updatedTodo);
     }
-    //DELETE /api/todos/todos/{todoId}:할일 삭제
+    //DELETE /api/todos/{todoId}:할일 삭제
     @DeleteMapping("/{todoId}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Integer todoId) {
         todoService.deleteTodo(todoId);
         return ResponseEntity.ok().build();
+    }
+    //PUT /api/todos/{todoId}:할일 수정
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<TodoEntity> updateTodo(
+            @PathVariable Integer todoId,
+            @RequestBody TodoUpdateRequest request) {
+
+        TodoEntity updatedTodo = todoService.updateTodoFields(todoId, request);
+        return ResponseEntity.ok(updatedTodo);
+    }
+
+    @GetMapping("/todos")
+    public ResponseEntity<List<TodoEntity>> getAllTodos(
+            @RequestParam(defaultValue = "id") String sortBy, // 기본값: id
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        // Service 계층 호출 시 정렬 정보를 전달
+        List<TodoEntity> todos = todoService.findAllTodosSorted(sortBy, direction);
+        return ResponseEntity.ok(todos);
     }
 }
