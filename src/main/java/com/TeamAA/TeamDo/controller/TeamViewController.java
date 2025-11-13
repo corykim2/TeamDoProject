@@ -20,6 +20,8 @@ public class TeamViewController {
         return "create-team"; // resources/templates/create-team.html
     }
 
+    //TODO 민성님 여기 create 2개라서 오류나는 거니까 나중에 고치십셔
+    /*
     // 팀 생성 처리
     @PostMapping("/create")
     public String createTeam(@RequestParam String name, Model model) {
@@ -27,4 +29,6 @@ public class TeamViewController {
         model.addAttribute("team", teamEntity);
         return "team-success"; // 생성 후 성공 페이지
     }
+
+     */
 }
