@@ -32,6 +32,9 @@ dependencies {
 	//나중에 로그인 구현하고 다시 입력
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation ("org.springframework.session:spring-session-data-redis")
+	implementation ("redis.clients:jedis")  // 또는 lettuce
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
