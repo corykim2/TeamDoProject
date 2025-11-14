@@ -70,11 +70,10 @@ public class ProjectService {
         // 1. 엔티티 목록 조회
         List<ProjectEntity> projects = projectRepository.findByTeamEntityName(teamName);
 
-        // [중요] 이 return 문을 아래와 똑같이 수정하세요.
+        // [중요] 이 return 문을 아래 코드로 덮어쓰세요.
         return projects.stream()
                 .map(project -> new ProjectResponse(project, calculateProgress(project)))
                 .collect(Collectors.toList());
-
     }
 
     @Transactional

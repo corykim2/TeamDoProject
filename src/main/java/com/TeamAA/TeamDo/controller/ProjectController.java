@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController // REST API 컨트롤러
 @RequestMapping("/api/projects") // 공통 URL 경로
@@ -34,7 +36,7 @@ public class ProjectController {
      * @PathVariable: URL 경로에 포함된 값(pno)을 파라미터로 받아옴
      */
     @GetMapping("/{pno}")
-    public ProjectEntity getProject(@PathVariable Integer pno) {
+    public ProjectResponse getProject(@PathVariable Integer pno) {
 
         // 5. URL에서 받은 pno를 서비스로 전달
         return projectService.getProjectByPno(pno);
