@@ -1,11 +1,13 @@
 package com.TeamAA.TeamDo.controller;
 
-import com.TeamAA.TeamDo.dto.ProjectCreateRequestDto;
+import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
+import com.TeamAA.TeamDo.dto.ProjectResponse;
 import com.TeamAA.TeamDo.entity.ProjectEntity; // 1. 엔티티 이름 변경 반영
 import com.TeamAA.TeamDo.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController // REST API 컨트롤러
 @RequestMapping("/api/projects") // 공통 URL 경로
@@ -20,7 +22,7 @@ public class ProjectController {
      * @RequestBody: 사용자가 보낸 JSON 데이터를 DTO 객체로 변환해 줌
      */
     @PostMapping
-    public ProjectEntity createProject(@RequestBody ProjectCreateRequestDto requestDto) {
+    public ProjectEntity createProject(@RequestBody ProjectCreateRequest requestDto) {
 
         // 4. DTO에서 데이터를 꺼내 서비스로 전달
         return projectService.createProject(requestDto);
@@ -52,4 +54,15 @@ public class ProjectController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * API 4: 팀 이름으로 프로젝트 목록 조회 (GET 방식)
+     *
+     */
+
+    @GetMapping
+    public List<ProjectResponse> getProjectsByTeamName(
+                                                        @RequestParam("teamName") String teamName) {
+
+        return projectService.getProjectsByTeamName(teamName);
+    }
 }

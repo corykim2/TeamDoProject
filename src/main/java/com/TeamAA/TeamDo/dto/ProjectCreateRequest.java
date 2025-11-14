@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ProjectCreateRequestDto {
+public class ProjectCreateRequest {
     private String pname; // 프로젝트명
 
     // "teamId" (PK)를 받음

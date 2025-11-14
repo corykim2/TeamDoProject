@@ -39,4 +39,9 @@ public class ProjectEntity {
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TodoEntity> TodoEntityList = new ArrayList<>();
 
+    public void updateProject(String pname, TeamEntity teamEntity) { //프로젝트 정보를 수정하는 비즈니스 메서드
+        this.pname = pname;
+        this.teamEntity = teamEntity;
+    }
+
 }
