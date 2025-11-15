@@ -1,10 +1,13 @@
 package com.TeamAA.TeamDo.controller;
 
 import com.TeamAA.TeamDo.dto.DeleteUserRequest;
+import com.TeamAA.TeamDo.dto.DeleteUserResponse;
+import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.service.DeleteUserService;
 import com.TeamAA.TeamDo.service.SessionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,12 +21,11 @@ public class DeleteUserController {
     private SessionService sessionService;
 
     @PostMapping("/delete")
-    public String deleteUser(HttpSession session, @RequestBody DeleteUserRequest request) {
-
-        String userId = sessionService.getUserId(session);
-        deleteUserService.deleteUser(userId, request.getPassword());
-
-        session.invalidate(); // 탈퇴 후 세션 종료
-        return "회원 탈퇴가 완료되었습니다.";
+    public ResponseEntity<DeleteUserResponse> deleteUser(@RequestBody DeleteUserRequest request, HttpSession session) {
+        String userId = sessionService.getUserId(session); //세션검증
+        UserEntity user = deleteUserService.deleteUser(userId, request);
+        session.invalidate();
+        DeleteUserResponse response = new DeleteUserResponse("회원 탈퇴가 완료되었습니다.");
+        return ResponseEntity.ok(response);
     }
 }
