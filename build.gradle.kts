@@ -33,6 +33,7 @@ dependencies {
 	//나중에 로그인 구현하고 다시 입력
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.mindrot:jbcrypt:0.4") //비밀번호 해싱
 
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation ("org.springframework.session:spring-session-data-redis")

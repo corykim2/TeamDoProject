@@ -2,6 +2,7 @@ package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.repository.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,8 @@ public class DeleteUserService {
         UserEntity user = userRepository.findById(Id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        if (!user.getPassword().equals(password)) {
+        // 해싱 비밀번호 검증
+        if (!BCrypt.checkpw(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
