@@ -27,11 +27,16 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14") //스웨거
+	//implementation("org.springframework.boot:spring-boot-starter-security")
 	//테스트용으로 잠시 주석처리
 	//나중에 로그인 구현하고 다시 입력
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation ("org.springframework.session:spring-session-data-redis")
+	implementation ("redis.clients:jedis")  // 또는 lettuce
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")

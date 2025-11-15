@@ -3,15 +3,14 @@ package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "team")
 public class TeamEntity {
 
@@ -19,16 +18,21 @@ public class TeamEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
-    @Column(updatable = false) //이 조건으로 업데이트시에는 아래거가 아래 옵션으로 insert 시에는 위에거가 사용되도록 함
-    private LocalDateTime createdTime;
-
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProjectEntity> projectEntityList = new ArrayList<>();
+    // ✅ 초대코드
+    @Column(nullable = false, unique = true, length = 10)
+    private String inviteCode;
 
-    @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<TeamPaticipatingEntity> teamPaticipatingEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "teamEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamParticipatingEntity> participants = new ArrayList<>();
+
+    // 팀 생성 시 초대코드 자동 생성
+    @PrePersist
+    public void generateInviteCode() {
+        if (this.inviteCode == null) {
+            this.inviteCode = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        }
+    }
 }

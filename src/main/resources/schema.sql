@@ -26,15 +26,23 @@ CREATE TABLE project (
 
 -- 4. Todo 테이블
 CREATE TABLE todo (
-    todoId INT PRIMARY KEY AUTO_INCREMENT, -- 고유 식별자 (기본 키)
-    pNo INT NOT NULL,                      -- Project 외래 키
+    todoId INT AUTO_INCREMENT PRIMARY KEY,
+    pNo INT NOT NULL,
+    createdTime DATETIME DEFAULT CURRENT_TIMESTAMP,
     priority INT NOT NULL,
     state VARCHAR(64) NOT NULL,
     deadline DATE NOT NULL,
-    managerId INT NOT NULL,                -- User 외래 키 (관리자 ID)
-    name VARCHAR(64) NOT NULL,              -- 할 일 이름 (NOT NULL 권고)
-    FOREIGN KEY (pNo) REFERENCES project(pNo),
-    FOREIGN KEY (managerId) REFERENCES users(id)
+    managerId INT NOT NULL,
+    name VARCHAR(64) NOT NULL,
+
+    -- 외래 키 설정
+    CONSTRAINT fk_todo_project FOREIGN KEY (pNo)
+        REFERENCES project(pNo)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_todo_manager FOREIGN KEY (managerId)
+        REFERENCES users(userId)
+        ON DELETE CASCADE
 );
 
 -- 5. TeamMembership 테이블

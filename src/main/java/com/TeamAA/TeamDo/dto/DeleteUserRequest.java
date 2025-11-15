@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRequest {
-    private String id;
+public class DeleteUserRequest {
     private String password;
 }
