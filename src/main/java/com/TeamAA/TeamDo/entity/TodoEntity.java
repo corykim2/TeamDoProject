@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
+import lombok.Getter;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity // 이 클래스가 JPA 엔티티임을 나타냅니다.
 @Setter
+@Getter
 @Table(name = "todo") // 매핑될 데이터베이스 테이블 이름을 지정합니다.
 public class TodoEntity {
 
