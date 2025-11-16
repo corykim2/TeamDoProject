@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.service;
 
+import com.TeamAA.TeamDo.controller.exceptionhandler.WithdrawnUserException;
 import com.TeamAA.TeamDo.dto.SignupRequest;
 import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.repository.UserRepository;
@@ -54,7 +55,7 @@ public class SignupService {
             userRepository.findById(request.getId()).ifPresent(user -> {
                 if (user.isWithdrawn()) {
                     // 탈퇴한 사용자
-                    throw new IllegalArgumentException("탈퇴한 사용자 입니다. 탈퇴한 사용자는 재가입이 불가능합니다.");
+                    throw new WithdrawnUserException("탈퇴한 사용자 입니다. 탈퇴한 사용자는 재가입이 불가능합니다.");
                 } else {
                     //중복아이디
                     throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
@@ -80,6 +81,9 @@ public class SignupService {
             user.setWithdrawn(false);
 
             return userRepository.save(user);
+        } catch(WithdrawnUserException e) {
+            throw e;
+
         } catch (Exception e) {
             // 내부 서버 예외
             throw new RuntimeException("회원가입 처리 중 문제가 발생하였습니다. 다시 시도해주세요.", e);
@@ -88,6 +92,6 @@ public class SignupService {
         // 로그인용 유저 조회
         public UserEntity findById (String id){
             return userRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다."));
         }
 }
