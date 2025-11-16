@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.exceptionhandler;
 
 import com.TeamAA.TeamDo.dto.ErrorResponse;
 import org.springframework.http.ResponseEntity;
@@ -13,5 +13,19 @@ public class GlobalAuthExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException e) {
         ErrorResponse error = new ErrorResponse(400,e.getMessage());
         return ResponseEntity.status(400).body(error);
+    }
+
+    //탈퇴한 유저
+    @ExceptionHandler(WithdrawnUserException.class)
+    public ResponseEntity<ErrorResponse> handleWithdrawnUser(WithdrawnUserException e) {
+        ErrorResponse error = new ErrorResponse(403, e.getMessage());
+        return ResponseEntity.status(403).body(error);
+    }
+
+    // 서버내부 오류
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleServerError(RuntimeException e) {
+        ErrorResponse error = new ErrorResponse(500, e.getMessage());
+        return ResponseEntity.status(500).body(error);
     }
 }
