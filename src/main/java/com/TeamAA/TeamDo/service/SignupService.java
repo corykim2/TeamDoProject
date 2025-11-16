@@ -15,7 +15,6 @@ public class SignupService {
     private UserRepository userRepository;
 
     public UserEntity signup(SignupRequest request) {
-        try {
             // 회원가입 예외처리
 
             // 입력데이터 누락 예외처리
@@ -69,7 +68,7 @@ public class SignupService {
 
 
             // 회원가입 정상로직
-
+        try {
             // 비밀번호 해싱
             String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt(12));
 
