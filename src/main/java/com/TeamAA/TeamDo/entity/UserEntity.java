@@ -24,7 +24,7 @@ public class UserEntity {
     @Column(length = 30, nullable = false, unique = true)
     private String email; // 이메일
 
-    @Column(length = 16, nullable = false)
+    @Column(length = 64, nullable = false)
     private String password; // 비밀번호
 
     @Column(length = 20, nullable = false)

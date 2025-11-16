@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-    @Schema(description = "로그인 메세지", example = "로그인 성공")
+public class DeleteUserResponse {
+    @Schema(description = "회원탈퇴 메세지", example = "회원탈퇴 완료")
     private String message;
 }

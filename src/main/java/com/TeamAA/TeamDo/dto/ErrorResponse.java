@@ -8,7 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-    @Schema(description = "로그인 메세지", example = "로그인 성공")
+public class ErrorResponse {
+
+    private int status;
+
     private String message;
 }

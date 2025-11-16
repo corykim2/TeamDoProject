@@ -8,7 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-    @Schema(description = "로그인 메세지", example = "로그인 성공")
+public class SignupResponse {
+    @Schema(description = "회원 아이디", example = "user123")
+    private String userId;
+    @Schema(description = "응답 메시지", example = "회원가입 성공")
     private String message;
+
 }
