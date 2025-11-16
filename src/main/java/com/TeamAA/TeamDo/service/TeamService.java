@@ -25,17 +25,30 @@ public class TeamService {
         this.teamParticipatingRepository = teamParticipatingRepository;
     }
 
-    // ✅ 팀 생성
-    public TeamEntity createTeam(String name) {
+    // ✅ 팀 생성 + 생성자 자동 참여
+    public TeamEntity createTeam(String name, String userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
         TeamEntity team = new TeamEntity();
         team.setName(name);
-        return teamRepository.save(team);
+
+        TeamEntity savedTeam = teamRepository.save(team);
+
+        // 생성자 자동 참여
+        TeamParticipatingEntity participation = new TeamParticipatingEntity();
+        participation.setUserEntity(user);
+        participation.setTeamEntity(savedTeam);
+        teamParticipatingRepository.save(participation);
+
+        return savedTeam;
     }
 
     // ✅ 초대코드로 팀 참가
     public TeamParticipatingEntity joinTeamByInviteCode(String userId, String inviteCode) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
         TeamEntity team = teamRepository.findByInviteCode(inviteCode)
                 .orElseThrow(() -> new RuntimeException("유효하지 않은 초대코드입니다."));
 
@@ -49,7 +62,7 @@ public class TeamService {
         return teamParticipatingRepository.save(participation);
     }
 
-    // ✅ 팀 상세정보 조회
+    // ✅ 팀 상세 조회
     public TeamEntity getTeamDetail(Long teamId) {
         return teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("팀을 찾을 수 없습니다."));
@@ -67,6 +80,7 @@ public class TeamService {
     public void leaveTeam(String userId, Long teamId) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
         TeamEntity team = getTeamDetail(teamId);
 
         teamParticipatingRepository.deleteByUserEntityAndTeamEntity(user, team);
