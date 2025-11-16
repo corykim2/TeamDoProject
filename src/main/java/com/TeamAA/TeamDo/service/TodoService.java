@@ -8,12 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.entity.ProjectEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.ProjectRepository;
-import com.TeamAA.TeamDo.repository.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,8 +16,6 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository; // Repository 주입
-    private final ProjectRepository projectRepository;// 프로젝트  Repository 주입
-    private final UserRepository userRepository;// 유저 Repository 주입
 
     // 1. 할 일 생성
     public TodoEntity createTodo(TodoEntity todo) {
@@ -87,29 +79,5 @@ public class TodoService {
         Sort sort = Sort.by(sortDirection, sortBy);
 
         return todoRepository.findAll(sort);
-    }
-
-    @Transactional //프로젝트 ID와 DTO를 받아 To-Do를 생성하고 "연결"하는 메서드
-    public TodoEntity createTodoForProject(Integer projectId, TodoCreateRequest dto) {
-
-        // 1. 부모 프로젝트 조회
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID: " + projectId));
-
-        // 2. 담당 매니저(User) 조회 (User의 PK는 String)
-        UserEntity manager = userRepository.findById(dto.getManagerId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid User ID: " + dto.getManagerId()));
-
-        // 3. new + Setters 사용 (TodoEntity의 틀을 유지)
-        TodoEntity newTodo = new TodoEntity();
-        newTodo.setProjectEntity(project); // (중요) 부모 프로젝트 "연결"
-        newTodo.setUserEntity(manager);    // (중요) 담당자 "연결"
-        newTodo.setName(dto.getName());
-        newTodo.setPriority(dto.getPriority());
-        newTodo.setDeadline(dto.getDeadline());
-        newTodo.setState("TODO"); // (중요) To-Do의 초기 상태를 "TODO"로 설정
-
-        // 4. To-Do 저장
-        return todoRepository.save(newTodo);
     }
 }

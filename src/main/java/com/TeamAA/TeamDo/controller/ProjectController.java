@@ -10,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.service.TodoService;
-import com.TeamAA.TeamDo.entity.TodoEntity;
-
 
 import java.util.List;
 
@@ -24,7 +20,6 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final TodoService todoService;//TodoService 주입
 
     /**
      * API 1: 프로젝트 생성 (POST 방식)
@@ -84,18 +79,5 @@ public class ProjectController {
     public ProjectEntity updateProject(@PathVariable Integer pno,
                                        @RequestBody ProjectUpdateRequest requestDto) {
         return projectService.updateProject(pno, requestDto);
-    }
-    /**
-     * 특정 프로젝트에 To-Do 생성
-     * API: POST /api/projects/{pno}/todos
-     */
-    @Operation(summary = "프로젝트에 To-Do 생성", description = "특정 프로젝트(pno)에 새로운 To-Do를 생성하고 연결합니다.")
-    @PostMapping("/{pno}/todos")
-    public ResponseEntity<TodoEntity> createTodoForProject(
-            @PathVariable("pno") Integer projectId,
-            @RequestBody TodoCreateRequest dto) {
-
-        TodoEntity createdTodo = todoService.createTodoForProject(projectId, dto);
-        return ResponseEntity.ok(createdTodo);
     }
 }
