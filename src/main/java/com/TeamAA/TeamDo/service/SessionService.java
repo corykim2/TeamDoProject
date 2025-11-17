@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.UserRepository;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.User;
 
 import com.TeamAA.TeamDo.dto.ErrorResponse;
 import com.TeamAA.TeamDo.dto.LogoutResponse;

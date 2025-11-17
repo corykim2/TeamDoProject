@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.dto;
+package com.TeamAA.TeamDo.dto.User;
 
 import lombok.Getter;
 import lombok.Setter;

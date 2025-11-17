@@ -1,15 +1,15 @@
 package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
-import com.TeamAA.TeamDo.entity.ProjectEntity; // 1. 엔티티 임포트 (이름 변경됨)
-import com.TeamAA.TeamDo.entity.TeamEntity;     // 2. Team 엔티티 임포트
-import com.TeamAA.TeamDo.entity.TodoEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;     // 3. User 엔티티 임포트
-import com.TeamAA.TeamDo.repository.ProjectRepository;
-import com.TeamAA.TeamDo.repository.TeamRepository; // 4. Team 리포지토리 임포트
-import com.TeamAA.TeamDo.repository.UserRepository; // 5. User 리포지토리 임포트
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity; // 1. 엔티티 임포트 (이름 변경됨)
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;     // 2. Team 엔티티 임포트
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;     // 3. User 엔티티 임포트
+import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
+import com.TeamAA.TeamDo.repository.Team.TeamRepository; // 4. Team 리포지토리 임포트
+import com.TeamAA.TeamDo.repository.User.UserRepository; // 5. User 리포지토리 임포트
 import com.TeamAA.TeamDo.dto.ProjectUpdateRequest;
-import com.TeamAA.TeamDo.dto.ProjectResponse;
+import com.TeamAA.TeamDo.dto.Project.ProjectResponse;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

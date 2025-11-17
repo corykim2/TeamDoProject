@@ -1,6 +1,5 @@
 package com.TeamAA.TeamDo.dto;
 
-import com.TeamAA.TeamDo.entity.UserEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

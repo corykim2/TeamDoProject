@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.dto;
+package com.TeamAA.TeamDo.dto.Todo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

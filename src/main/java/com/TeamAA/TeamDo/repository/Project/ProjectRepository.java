@@ -1,6 +1,6 @@
-package com.TeamAA.TeamDo.repository;
+package com.TeamAA.TeamDo.repository.Project;
 
-import com.TeamAA.TeamDo.entity.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

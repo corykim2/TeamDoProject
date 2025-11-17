@@ -1,6 +1,6 @@
-package com.TeamAA.TeamDo.repository;
+package com.TeamAA.TeamDo.repository.Team;
 
-import com.TeamAA.TeamDo.entity.TeamEntity;
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

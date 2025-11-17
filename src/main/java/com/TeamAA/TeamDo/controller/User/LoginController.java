@@ -1,10 +1,10 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.User;
 
 import com.TeamAA.TeamDo.dto.ErrorResponse;
-import com.TeamAA.TeamDo.dto.SignupRequest;
-import com.TeamAA.TeamDo.dto.SignupResponse;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.service.SignupService;
+import com.TeamAA.TeamDo.dto.LoginRequest;
+import com.TeamAA.TeamDo.dto.LoginResponse;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -12,27 +12,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "회원가입", description = "회원가입 엔드포인트")
+@Tag(name = "로그인", description = "로그인 엔드포인트")
 @RestController
 @RequestMapping("/auth")
-public class SignupController {
+public class LoginController {
 
     @Autowired
-    private SignupService signupService;
+    private LoginService loginService;
 
-    @Operation(summary = "회원가입", description = "사용자 정보를 받아 회원가입을 진행합니다.")
+    @Operation(summary = "로그인", description = "사용자 입력을 받아 로그인을 진행합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공",
+            @ApiResponse(responseCode = "200", description = "로그인 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = SignupResponse.class),
-                            examples = @ExampleObject(value = "{\"userId\":\"user123\",\"message\":\"회원가입 성공\"}")
+                            schema = @Schema(implementation = LoginResponse.class),
+                            examples = @ExampleObject(value = "{\"message\":\"로그인 성공\"}")
                     )),
-            @ApiResponse(responseCode = "400", description = "입력값 오류, 입력값 중복",
+            @ApiResponse(responseCode = "400", description = "입력값 오류, 아이디 또는 비밀번호 불일치",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
@@ -48,13 +49,15 @@ public class SignupController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":500,\"message\":\"회원가입 처리 중 문제가 발생했습니다.\"}")
+                            examples = @ExampleObject(value = "{\"status\":500,\"message\":\"로그인 처리 중 문제가 발생했습니다.\"}")
                     ))
     })
-    @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
-        UserEntity user = signupService.signup(request);
-        SignupResponse response = new SignupResponse(user.getId(), "회원가입 성공");
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
+        UserEntity user = loginService.login(request);
+        session.setAttribute("userId", user.getId()); //세션생성 및 아이디 매칭
+        LoginResponse response = new LoginResponse("로그인완료");
         return ResponseEntity.ok(response);
     }
 }

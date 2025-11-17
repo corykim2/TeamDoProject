@@ -1,13 +1,12 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.Todo;
 
 //import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.dto.TodoStateUpdateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoStateUpdateRequest;
 import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
-import com.TeamAA.TeamDo.entity.SessionEntity;
-import com.TeamAA.TeamDo.entity.TodoEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.TodoRepository;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
 import com.TeamAA.TeamDo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

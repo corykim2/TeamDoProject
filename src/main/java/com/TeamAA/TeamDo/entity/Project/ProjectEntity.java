@@ -1,5 +1,8 @@
-package com.TeamAA.TeamDo.entity;
+package com.TeamAA.TeamDo.entity.Project;
 
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

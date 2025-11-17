@@ -1,6 +1,5 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.Team;
 
-import com.TeamAA.TeamDo.entity.TeamEntity;
 import com.TeamAA.TeamDo.service.SessionService;
 import com.TeamAA.TeamDo.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;

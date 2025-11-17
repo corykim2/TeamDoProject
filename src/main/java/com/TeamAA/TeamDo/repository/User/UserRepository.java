@@ -1,6 +1,6 @@
-package com.TeamAA.TeamDo.repository;
+package com.TeamAA.TeamDo.repository.User;
 
-import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

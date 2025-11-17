@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.dto;
+package com.TeamAA.TeamDo.dto.Team;
 
 public class CreateTeamRequest {
     private String name; // 팀 이름

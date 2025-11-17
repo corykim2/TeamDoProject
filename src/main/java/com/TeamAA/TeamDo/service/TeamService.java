@@ -1,11 +1,11 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.entity.TeamEntity;
-import com.TeamAA.TeamDo.entity.TeamParticipatingEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.TeamParticipatingRepository;
-import com.TeamAA.TeamDo.repository.TeamRepository;
-import com.TeamAA.TeamDo.repository.UserRepository;
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;
+import com.TeamAA.TeamDo.entity.Team.TeamParticipatingEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
+import com.TeamAA.TeamDo.repository.Team.TeamRepository;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

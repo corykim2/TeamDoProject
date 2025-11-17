@@ -1,10 +1,9 @@
-package com.TeamAA.TeamDo.repository;
+package com.TeamAA.TeamDo.repository.Todo;
 
-import com.TeamAA.TeamDo.entity.TodoEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository

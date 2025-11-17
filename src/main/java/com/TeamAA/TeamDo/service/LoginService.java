@@ -2,7 +2,7 @@ package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.controller.exceptionhandler.WithdrawnUserException;
 import com.TeamAA.TeamDo.dto.LoginRequest;
-import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

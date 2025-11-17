@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.entity;
+package com.TeamAA.TeamDo.entity.User;
 
 import jakarta.persistence.*;
 import lombok.Getter;

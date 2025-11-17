@@ -1,10 +1,8 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.Team;
 
-import com.TeamAA.TeamDo.entity.TeamEntity;
 import com.TeamAA.TeamDo.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller

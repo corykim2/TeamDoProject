@@ -1,8 +1,9 @@
-package com.TeamAA.TeamDo.entity;
+package com.TeamAA.TeamDo.entity.Todo;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 

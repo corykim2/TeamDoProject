@@ -1,9 +1,9 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.User;
 
 import com.TeamAA.TeamDo.dto.DeleteUserRequest;
 import com.TeamAA.TeamDo.dto.DeleteUserResponse;
 import com.TeamAA.TeamDo.dto.ErrorResponse;
-import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.service.DeleteUserService;
 import com.TeamAA.TeamDo.service.SessionService;
 import io.swagger.v3.oas.annotations.Operation;

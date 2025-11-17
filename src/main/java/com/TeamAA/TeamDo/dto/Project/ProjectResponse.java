@@ -1,6 +1,6 @@
-package com.TeamAA.TeamDo.dto;
+package com.TeamAA.TeamDo.dto.Project;
 
-import com.TeamAA.TeamDo.entity.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

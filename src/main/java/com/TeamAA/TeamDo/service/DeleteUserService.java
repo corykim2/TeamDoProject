@@ -1,8 +1,8 @@
 package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.DeleteUserRequest;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.UserRepository;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

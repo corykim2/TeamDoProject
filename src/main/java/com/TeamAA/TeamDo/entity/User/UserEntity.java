@@ -1,5 +1,8 @@
-package com.TeamAA.TeamDo.entity;
+package com.TeamAA.TeamDo.entity.User;
 
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Team.TeamParticipatingEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;

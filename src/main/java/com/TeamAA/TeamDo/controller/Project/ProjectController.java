@@ -1,9 +1,9 @@
-package com.TeamAA.TeamDo.controller;
+package com.TeamAA.TeamDo.controller.Project;
 
 import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
 import com.TeamAA.TeamDo.dto.ProjectUpdateRequest;
-import com.TeamAA.TeamDo.dto.ProjectResponse;
-import com.TeamAA.TeamDo.entity.ProjectEntity; // 1. 엔티티 이름 변경 반영
+import com.TeamAA.TeamDo.dto.Project.ProjectResponse;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity; // 1. 엔티티 이름 변경 반영
 import com.TeamAA.TeamDo.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
