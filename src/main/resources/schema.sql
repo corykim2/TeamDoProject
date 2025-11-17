@@ -1,3 +1,4 @@
+
 -- 1. User 테이블
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -69,3 +70,4 @@ CREATE TABLE session(
     expiresAt TIMESTAMP NOT NULL,
     FOREIGN KEY (uId) REFERENCES users(id)
 );
+*/

@@ -1,10 +1,19 @@
 package com.TeamAA.TeamDo.service;
 
+import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SessionService {
+
+    private final UserRepository userRepository;
+
+    public SessionService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 
     public String getUserId(HttpSession session) {
         String userId = (String) session.getAttribute("userId");
@@ -13,4 +22,9 @@ public class SessionService {
         }
         return userId;
     }
+    public UserEntity findById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
 }

@@ -2,6 +2,7 @@ package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,19 +33,20 @@ public class TodoEntity {
     private Integer priority; // priority INT NOT NULL
 
     @Column(name = "state", length = 64, nullable = false)
-    private String state; // state VARCHAR(64) NOT NULL
+    private String state="미완"; // state VARCHAR(64) NOT NULL
 
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline; // deadline DATE NOT NULL (Java 8의 LocalDate 사용)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "managerId", nullable = false)
-    private UserEntity userEntity;
+    private UserEntity managerId;
 
     @Column(name = "name", length = 64, nullable = false)
     private String name; // 할 일 이름 (name VARCHAR(64) NOT NULL)
 
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creatorId", nullable = false)
+    private UserEntity creatorId; // 생성자
 
 }

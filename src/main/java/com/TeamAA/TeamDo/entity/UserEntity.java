@@ -33,14 +33,18 @@ public class UserEntity {
     @Column(nullable = false)
     private boolean withdrawn = false; // 회원 탈퇴 여부, 기본 false
 
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<TodoEntity> TodoEntityList = new ArrayList<>();
+    @OneToMany(mappedBy = "managerId", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TodoEntity> managedTodoEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creatorId", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TodoEntity> createdTodoEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProjectEntity> projectEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TeamParticipatingEntity> teamParticipatingEntityList = new ArrayList<>();
+
 
     // 기본 생성자
     public UserEntity() {}
