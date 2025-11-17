@@ -2,6 +2,12 @@ package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
 import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
+import com.TeamAA.TeamDo.entity.ProjectEntity;
+import com.TeamAA.TeamDo.entity.TodoEntity;
+import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.repository.ProjectRepository;
+import com.TeamAA.TeamDo.repository.TodoRepository;
+import com.TeamAA.TeamDo.repository.UserRepository;
 import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
@@ -20,10 +26,13 @@ public class TodoService {
 
     private final TodoRepository todoRepository; // Repository 주입
     private final UserRepository userRepository;
-
+    private final ProjectRepository projectRepository;
     // 1. 할 일 생성
     public TodoEntity createTodo(TodoCreateRequest requestDto, UserEntity loginUser) {
         TodoEntity todo = new TodoEntity();
+
+
+        todo.setProjectEntity(projectRepository.findByPno(requestDto.getPNo()));
         todo.setName(requestDto.getName());
         todo.setDeadline(requestDto.getDeadline());
         todo.setPriority(requestDto.getPriority());
