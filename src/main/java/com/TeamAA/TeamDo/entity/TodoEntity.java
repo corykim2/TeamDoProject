@@ -18,7 +18,7 @@ public class TodoEntity {
     @Id // 기본 키(Primary Key)를 지정합니다.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성 전략을 지정합니다. (AUTO_INCREMENT에 해당)
     @Column(name = "todoId")
-    private Integer todoId; // 고유 식별자 (todo_id INT PRIMARY KEY AUTO_INCREMENT)
+    private Long todoId; // 고유 식별자 (todo_id INT PRIMARY KEY AUTO_INCREMENT)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pNo", nullable = false)

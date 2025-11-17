@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/api/**") // 인증이 필요한 경로
+                .addPathPatterns("/api/todos/**") // 인증이 필요한 경로
                 .excludePathPatterns("/auth/**", "/signup", "/css/**", "/js/**"); // 로그인/회원가입 제외
     }
 }

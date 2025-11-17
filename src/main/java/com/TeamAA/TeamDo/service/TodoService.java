@@ -39,7 +39,7 @@ public class TodoService {
 
 
     // 2. 특정 할 일 조회
-    public TodoEntity getTodoById(Integer todoId) {
+    public TodoEntity getTodoById(Long todoId) {
         return todoRepository.findById(todoId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 Todo가 존재하지 않습니다." ));
     }
@@ -50,13 +50,13 @@ public class TodoService {
     }
 
     // 4. 할 일 상태 업데이트
-    public TodoEntity updateTodoState(Integer todoId, String newState) {
+    public TodoEntity updateTodoState(Long todoId, String newState) {
         TodoEntity todo = getTodoById(todoId);
         todo.setState(newState);
         return todoRepository.save(todo);
     }
     //5. 할일 삭제(본인만 삭제가능 하도록 위해서는 로그인 기능 필요)
-    public TodoEntity deleteTodo(Integer todoId,UserEntity loginUser){
+    public TodoEntity deleteTodo(Long todoId,UserEntity loginUser){
         TodoEntity todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new RuntimeException("해당 Todo가 존재하지 않습니다."));
         String currentUserId = loginUser.getId();
@@ -67,7 +67,7 @@ public class TodoService {
         return todo;
     }
     //6. 할일 수정
-    public TodoEntity updateTodoFields(Integer todoId, TodoUpdateRequest request,UserEntity loginUser) {
+    public TodoEntity updateTodoFields(Long todoId, TodoUpdateRequest request,UserEntity loginUser) {
         TodoEntity todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new EntityNotFoundException("할 일을 찾을 수 없습니다."));
 

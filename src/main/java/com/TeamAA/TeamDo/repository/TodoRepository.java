@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface TodoRepository extends JpaRepository<TodoEntity, Integer> {
+public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     // JpaRepository<엔티티 클래스, 기본 키 타입>
 
     List<TodoEntity> findByProjectEntity_pno(Integer pNo);

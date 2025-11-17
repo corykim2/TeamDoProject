@@ -46,7 +46,7 @@ public class TodoController {
     @GetMapping("/{todoId}")
     public ResponseEntity<TodoEntity> getTodo(
             @Parameter(description = "할 일 ID")
-            @PathVariable Integer todoId,HttpServletRequest request) {
+            @PathVariable Long todoId,HttpServletRequest request) {
         //UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         TodoEntity todo = todoService.getTodoById(todoId);
         return ResponseEntity.ok(todo);
@@ -74,7 +74,7 @@ public class TodoController {
     @PutMapping("/{todoId}/state")
     public ResponseEntity<?> updateTodoState(
             @Parameter(description = "할 일 ID,할 일 상태 업데이트 요청 DTO")
-            @PathVariable Integer todoId,
+            @PathVariable Long todoId,
             @RequestBody TodoStateUpdateRequest requestDto,
             HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
@@ -91,7 +91,7 @@ public class TodoController {
     @DeleteMapping("/{todoId}")
     public ResponseEntity<?> deleteTodo(
             @Parameter(description = "할 일 ID")
-            @PathVariable Integer todoId,HttpServletRequest request) {
+            @PathVariable Long todoId,HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         todoService.deleteTodo(todoId,loginUser);
         return ResponseEntity.ok().build();
@@ -102,7 +102,7 @@ public class TodoController {
     @PatchMapping("/{todoId}")
     public ResponseEntity<?> updateTodo(
             @Parameter(description = "할 일 ID,할 일 업데이트 요청 DTO")
-            @PathVariable Integer todoId,
+            @PathVariable Long todoId,
             @RequestBody TodoUpdateRequest UpdateRequest,HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         TodoEntity todo = todoService.getTodoById(todoId);
