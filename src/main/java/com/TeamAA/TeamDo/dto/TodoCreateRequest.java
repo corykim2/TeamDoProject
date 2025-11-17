@@ -1,6 +1,8 @@
 package com.TeamAA.TeamDo.dto;
 
+import com.TeamAA.TeamDo.entity.ProjectEntity;
 import com.TeamAA.TeamDo.entity.UserEntity;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
@@ -12,6 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Getter
 @Setter
 public class TodoCreateRequest {
+
+    @Schema(description = "프로젝트 id", example = "프로젝트")
+    private Integer pNo;
 
     @Schema(description = "할 일 이름", example = "api 개발")
     private String name;
