@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+//import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -45,7 +46,7 @@ public class TodoService {
 
     // 3. 프로젝트별 할 일 목록 조회
     public List<TodoEntity> getTodosByProjectEntity(Integer pNo) {
-        return todoRepository.findByProjectEntity_pNo(pNo); // Repository에서 선언한 메소드 사용
+        return todoRepository.findByProjectEntity_pno(pNo); // Repository에서 선언한 메소드 사용
     }
 
     // 4. 할 일 상태 업데이트
@@ -60,7 +61,7 @@ public class TodoService {
                 .orElseThrow(() -> new RuntimeException("해당 Todo가 존재하지 않습니다."));
         String currentUserId = loginUser.getId();
         if (!todo.getCreatorId().getId().equals(currentUserId)) {
-            throw new AccessDeniedException("본인의 할 일만 삭제할 수 있습니다.");
+            //throw new AccessDeniedException("본인의 할 일만 삭제할 수 있습니다.");
         }
         todoRepository.delete(todo);
         return todo;
@@ -71,7 +72,7 @@ public class TodoService {
                 .orElseThrow(() -> new EntityNotFoundException("할 일을 찾을 수 없습니다."));
 
         if (!todo.getManagerId().equals(loginUser)) {
-            throw new AccessDeniedException("본인의 할 일만 수정할 수 있습니다.");
+            //throw new AccessDeniedException("본인의 할 일만 수정할 수 있습니다.");
         }
         if (request.getName() != null) {
             todo.setName(request.getName());

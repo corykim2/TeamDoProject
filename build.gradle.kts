@@ -35,7 +35,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.mindrot:jbcrypt:0.4") //비밀번호 해싱
 
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation ("org.springframework.session:spring-session-data-redis")
 	implementation ("redis.clients:jedis")  // 또는 lettuce

@@ -37,7 +37,7 @@ public class ProjectService {
 
         // 10. 조회한 엔티티(객체)를 포함하여 ProjectEntity 생성
         ProjectEntity newProject = ProjectEntity.builder()
-                .pName(dto.getPname())
+                .pname(dto.getPname())
                 .teamEntity(team)   // [중요] 문자열이 아닌 TeamEntity 객체를 연결
                 .userEntity(user)   // [중요] UserEntity 객체를 연결
                 // createdTime은 @CreationTimestamp가 자동 생성
@@ -48,7 +48,7 @@ public class ProjectService {
     }
 
 
-     //ID로 프로젝트 조회
+    //ID로 프로젝트 조회
 
     public ProjectResponse getProjectByPno(Integer pno) {
         ProjectEntity project = projectRepository.findById(pno)

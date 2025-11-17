@@ -18,18 +18,18 @@ import java.util.List;
 public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pNo")
-    private Integer pNo; // 프로젝트번호 (PK)
+    @Column(name = "pno")
+    private Integer pno; // 프로젝트번호 (PK)
 
     @CreationTimestamp
     @Column(updatable = false) //이 조건으로 업데이트시에는 아래거가 아래 옵션으로 insert 시에는 위에거가 사용되도록 함
     private LocalDateTime createdTime;
 
-    @Column(name = "pName", nullable = false)
-    private String pName; // 프로젝트명
+    @Column(name = "pname", nullable = false)
+    private String pname; // 프로젝트명
 
     @ManyToOne(fetch = FetchType.LAZY) //정보가 필요할 때만 쿼리로 가져옴
-    @JoinColumn(name = "teamCode", nullable = false)
+    @JoinColumn(name = "team_code", nullable = false)
     private TeamEntity teamEntity; // 팀 코드
 
     @ManyToOne(fetch = FetchType.LAZY) //정보가 필요할 때만 쿼리로 가져옴
