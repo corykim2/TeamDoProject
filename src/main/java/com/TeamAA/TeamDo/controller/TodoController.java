@@ -32,7 +32,7 @@ public class TodoController {
 
     // GET /api/todos/project/{pNo} : 프로젝트별 할 일 조회
     @GetMapping("/project/{pNo}")
-    public ResponseEntity<List<TodoEntity>> getTodosByProject(@PathVariable Integer pNo) {
+    public ResponseEntity<List<TodoEntity>> getTodosByProject(@PathVariable Long pNo) {
         List<TodoEntity> todos = todoService.getTodosByProjectEntity(pNo);
         return ResponseEntity.ok(todos);
     }

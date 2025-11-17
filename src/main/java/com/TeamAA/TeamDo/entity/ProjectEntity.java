@@ -19,7 +19,7 @@ public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pno")
-    private Integer pno; // 프로젝트번호 (PK)
+    private Long pno; // 프로젝트번호 (PK)
 
     @CreationTimestamp
     @Column(updatable = false) //이 조건으로 업데이트시에는 아래거가 아래 옵션으로 insert 시에는 위에거가 사용되도록 함

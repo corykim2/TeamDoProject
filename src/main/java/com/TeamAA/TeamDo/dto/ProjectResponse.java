@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ProjectResponse {
-    private Integer pno;
+    private Long pno;
     private String pname;
     private LocalDateTime createdTime;
     private String teamName; // TeamEntity의 이름

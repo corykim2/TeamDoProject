@@ -29,7 +29,7 @@ public class TodoService {
     }
 
     // 3. 프로젝트별 할 일 목록 조회
-    public List<TodoEntity> getTodosByProjectEntity(Integer pno) {
+    public List<TodoEntity> getTodosByProjectEntity(Long pno) {
         return todoRepository.findByProjectEntity_pno(pno); // Repository에서 선언한 메소드 사용
     }
 

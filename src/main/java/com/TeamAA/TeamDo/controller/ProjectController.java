@@ -41,7 +41,7 @@ public class ProjectController {
      */
     @Operation(summary = "특정 프로젝트 조회", description = "pno(ID)로 프로젝트 1건과 진행률을 조회합니다.")
     @GetMapping("/{pno}")
-    public ProjectResponse getProject(@PathVariable Integer pno) {
+    public ProjectResponse getProject(@PathVariable Long pno) {
 
         // 5. URL에서 받은 pno를 서비스로 전달
         return projectService.getProjectByPno(pno);
@@ -53,7 +53,7 @@ public class ProjectController {
      */
     @Operation(summary = "프로젝트 삭제", description = "pno(ID)로 프로젝트 1건을 삭제합니다.")
     @DeleteMapping("/{pno}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Integer pno) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long pno) {
 
         // 2. 서비스의 deleteProject 메서드 호출
         projectService.deleteProject(pno);
@@ -76,7 +76,7 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 수정", description = "pno(ID)로 프로젝트 1건의 이름(pname)과 소속 팀(teamId)을 수정합니다.")
     @PutMapping("/{pno}")
-    public ProjectEntity updateProject(@PathVariable Integer pno,
+    public ProjectEntity updateProject(@PathVariable Long pno,
                                        @RequestBody ProjectUpdateRequest requestDto) {
         return projectService.updateProject(pno, requestDto);
     }
