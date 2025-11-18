@@ -53,7 +53,7 @@ public class TodoController {
 
     // GET /api/todos/project/{pNo} : 프로젝트별 할 일 조회
     @Operation(summary = "프로젝트별 할 일 조회", description = "프로젝트별 할 일을 조회합니다.")
-    @GetMapping("/project/{pNo}")
+    @GetMapping("/project/{pno}")
     public ResponseEntity<List<TodoEntity>> getTodosByProject(
             @Parameter (description="프로젝트 번호")
             @PathVariable Integer pno,HttpServletRequest request) {

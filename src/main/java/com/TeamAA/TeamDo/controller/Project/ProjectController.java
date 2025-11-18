@@ -27,7 +27,7 @@ public class ProjectController {
      * @RequestBody: 사용자가 보낸 JSON 데이터를 DTO 객체로 변환해 줌
      */
     @Operation(summary = "프로젝트 생성", description = "새로운 프로젝트를 생성합니다.") // [SWAGGER] 3. API 설명 추가
-    @PostMapping
+    @PostMapping("/create")
     public ProjectEntity createProject(@RequestBody ProjectCreateRequest requestDto) {
 
         // 4. DTO에서 데이터를 꺼내 서비스로 전달
@@ -52,7 +52,7 @@ public class ProjectController {
      * URL: DELETE /api/projects/1
      */
     @Operation(summary = "프로젝트 삭제", description = "pno(ID)로 프로젝트 1건을 삭제합니다.")
-    @DeleteMapping("/{pno}")
+    @DeleteMapping("/delete/{pno}")
     public ResponseEntity<Void> deleteProject(@PathVariable Integer pno) {
 
         // 2. 서비스의 deleteProject 메서드 호출
