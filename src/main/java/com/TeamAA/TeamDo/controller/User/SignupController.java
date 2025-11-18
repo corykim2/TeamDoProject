@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "회원가입", description = "회원가입 엔드포인트")
+@Tag(name = "유저관리", description = "유저관리 엔드포인트")
 @RestController
 @RequestMapping("/auth")
 public class SignupController {

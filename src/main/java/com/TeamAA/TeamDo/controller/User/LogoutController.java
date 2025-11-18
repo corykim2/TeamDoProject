@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.TeamAA.TeamDo.service.SessionService;
 
-@Tag(name = "로그아웃", description = "로그아웃 엔드포인트")
+@Tag(name = "유저관리", description = "유저관리 엔드포인트")
 @RestController
 @RequestMapping("/auth")
 public class LogoutController {
