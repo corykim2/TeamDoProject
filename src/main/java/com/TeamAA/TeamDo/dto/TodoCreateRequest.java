@@ -1,8 +1,5 @@
 package com.TeamAA.TeamDo.dto;
 
-import com.TeamAA.TeamDo.entity.ProjectEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
