@@ -1,5 +1,7 @@
 package com.TeamAA.TeamDo.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -29,7 +31,8 @@ public class TodoEntity {
     private LocalDateTime createdTime;
 
     @Column(name = "priority", nullable = false)
-    @Size(min = 1, max = 5)
+    @Min(1)
+    @Max(5)
     private Integer priority; // priority INT NOT NULL
 
     @Column(name = "state", length = 64, nullable = false)
