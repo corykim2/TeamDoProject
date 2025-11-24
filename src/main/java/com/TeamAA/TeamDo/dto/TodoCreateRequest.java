@@ -15,13 +15,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Setter
 public class TodoCreateRequest {
 
-    @Schema(description = "프로젝트 id", example = "프로젝트")
+    @Schema(description = "프로젝트 id", example = "1")
     private Integer pNo;
 
     @Schema(description = "할 일 이름", example = "api 개발")
     private String name;
 
-    @Schema(description = "담당자 ID")
+    @Schema(description = "담당자 ID",example = "user123")
     private String managerId;
 
     @Schema(description = "마감일", example = "2025-11-20")
