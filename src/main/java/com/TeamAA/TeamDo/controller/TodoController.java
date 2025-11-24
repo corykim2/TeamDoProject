@@ -32,7 +32,7 @@ public class TodoController {
     private TodoRepository todoRepository;
 
     // POST /api/todos : 새로운 할 일 생성
-    @Operation(summary = "할 일 생성", description = "새로운 할 일을 생성합니다.")
+    @Operation(summary = "할 일 생성", description = "할일 이름,담당자,마감일,우선순위를 입력받아 새로운 할 일을 생성합니다.")
     @PostMapping("/create")
     public ResponseEntity<?> createTodo(@RequestBody TodoCreateRequest requestDto, HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
@@ -42,7 +42,7 @@ public class TodoController {
     }
 
     // GET /api/todos/{todoId} : 특정 할 일 조회
-    @Operation(summary = "특정 할 일 조회", description = "특정 할 일을 조회합니다.")
+    @Operation(summary = "특정 할 일 조회", description = "선택한 할 일을 상세(생성자,생성시간 포함)조회합니다. 수정,삭제선택창 접속용")
     @GetMapping("/{todoId}")
     public ResponseEntity<TodoEntity> getTodo(
             @Parameter(description = "할 일 ID")
@@ -53,7 +53,7 @@ public class TodoController {
     }
 
     // GET /api/todos/project/{pNo} : 프로젝트별 할 일 조회
-    @Operation(summary = "프로젝트별 할 일 조회", description = "프로젝트별 할 일을 조회합니다.")
+    @Operation(summary = "프로젝트별 할 일 조회", description = "프로젝트별 본인 포함 다른 팀원의 할일을 전체 조회합니다.")
     @GetMapping("/project/{pNo}")
     public ResponseEntity<List<TodoEntity>> getTodosByProject(
             @Parameter (description="프로젝트 번호")
@@ -70,7 +70,7 @@ public class TodoController {
     }
 
     // PUT /api/todos/{todoId}/state : 할 일 상태 업데이트
-    @Operation(summary = "할 일 상태 업데이트", description = "할 일 상태를 업데이트합니다.")
+    @Operation(summary = "할 일 상태 업데이트", description = "메인페이지에서 할 일 상태를(완료,보류,진행중,디버깅등) 업데이트합니다.")
     @PutMapping("/{todoId}/state")
     public ResponseEntity<?> updateTodoState(
             @Parameter(description = "할 일 ID,할 일 상태 업데이트 요청 DTO")
@@ -83,11 +83,11 @@ public class TodoController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인의 할 일만 상태수정 가능합니다.");
         }
         String newState = requestDto.getState();
-        TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState);
+        TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState,loginUser);
         return ResponseEntity.ok(updatedTodo);
     }
     //DELETE /api/todos/{todoId}:할일 삭제
-    @Operation(summary = "할 일 삭제", description = "할 일을 삭제합니다.")
+    @Operation(summary = "할 일 삭제", description = "할 일을 삭제합니다.(생성자만)")
     @DeleteMapping("/{todoId}")
     public ResponseEntity<?> deleteTodo(
             @Parameter(description = "할 일 ID")
