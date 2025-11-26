@@ -8,15 +8,17 @@ import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
 import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-//import java.nio.file.AccessDeniedException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor // Repository를 주입받기 위한 Lombok 어노테이션
+@Transactional
 public class TodoService {
 
     private final TodoRepository todoRepository; // Repository 주입
@@ -25,7 +27,6 @@ public class TodoService {
     // 1. 할 일 생성
     public TodoEntity createTodo(TodoCreateRequest requestDto, UserEntity loginUser) {
         TodoEntity todo = new TodoEntity();
-
 
         todo.setProjectEntity(projectRepository.findByPno(requestDto.getPNo()));
         todo.setName(requestDto.getName());
@@ -54,8 +55,11 @@ public class TodoService {
     }
 
     // 4. 할 일 상태 업데이트
-    public TodoEntity updateTodoState(Long todoId, String newState) {
+    public TodoEntity updateTodoState(Long todoId, String newState,UserEntity loginUser) {
         TodoEntity todo = getTodoById(todoId);
+        if (!todo.getManagerId().getId().equals(loginUser.getId())) {
+            throw new RuntimeException("접근이 거부되었습니다.");
+        }
         todo.setState(newState);
         return todoRepository.save(todo);
     }
@@ -65,7 +69,7 @@ public class TodoService {
                 .orElseThrow(() -> new RuntimeException("해당 Todo가 존재하지 않습니다."));
         String currentUserId = loginUser.getId();
         if (!todo.getCreatorId().getId().equals(currentUserId)) {
-            //throw new AccessDeniedException("본인의 할 일만 삭제할 수 있습니다.");
+            throw new RuntimeException("접근이 거부되었습니다.");
         }
         todoRepository.delete(todo);
         return todo;
@@ -76,7 +80,7 @@ public class TodoService {
                 .orElseThrow(() -> new EntityNotFoundException("할 일을 찾을 수 없습니다."));
 
         if (!todo.getManagerId().equals(loginUser)) {
-            //throw new AccessDeniedException("본인의 할 일만 수정할 수 있습니다.");
+            throw new RuntimeException("접근이 거부되었습니다.");
         }
         if (request.getName() != null) {
             todo.setName(request.getName());
