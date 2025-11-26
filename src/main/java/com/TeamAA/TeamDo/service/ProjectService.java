@@ -50,7 +50,7 @@ public class ProjectService {
 
     //ID로 프로젝트 조회
 
-    public ProjectResponse getProjectByPno(Integer pno) {
+    public ProjectResponse getProjectByPno(Long pno) {
         ProjectEntity project = projectRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid project PNO: " + pno));
 
@@ -60,7 +60,7 @@ public class ProjectService {
 
 
     @Transactional
-    public void deleteProject(Integer pno) {
+    public void deleteProject(Long pno) {
         projectRepository.deleteById(pno);
     }
 
@@ -77,7 +77,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectEntity updateProject(Integer pno, ProjectUpdateRequest dto) {
+    public ProjectEntity updateProject(Long pno, ProjectUpdateRequest dto) {
 
         // 1. 수정할 프로젝트 찾기
         ProjectEntity project = projectRepository.findById(pno)
