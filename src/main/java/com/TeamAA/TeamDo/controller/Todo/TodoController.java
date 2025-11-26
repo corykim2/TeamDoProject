@@ -56,7 +56,7 @@ public class TodoController {
     @GetMapping("/project/{pNo}")
     public ResponseEntity<List<TodoEntity>> getTodosByProject(
             @Parameter (description="프로젝트 번호")
-            @PathVariable Integer pno,HttpServletRequest request) {
+            @PathVariable Long pno,HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         //ProjectService.isUserInProject(pno, loginUser.getId());
         //프로젝트에 사용자가 참여하는지 확인하는 기능 필요

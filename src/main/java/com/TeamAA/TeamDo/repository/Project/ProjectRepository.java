@@ -8,5 +8,5 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     List<ProjectEntity> findByTeamEntityName(String name);
     // Project의 teamEntity 필드 안에 있는 'name' 필드를 기준으로 찾기
 
-    ProjectEntity findByPno(Integer pNo);
+    ProjectEntity findByPno(Long pNo);
 }

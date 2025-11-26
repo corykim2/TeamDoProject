@@ -1,9 +1,11 @@
 package com.TeamAA.TeamDo.controller.Team;
 
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;
 import com.TeamAA.TeamDo.service.TeamService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller

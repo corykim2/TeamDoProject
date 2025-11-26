@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class TodoCreateRequest {
 
     @Schema(description = "프로젝트 id", example = "1")
-    private Integer pNo;
+    private Long pNo;
 
     @Schema(description = "할 일 이름", example = "api 개발")
     private String name;

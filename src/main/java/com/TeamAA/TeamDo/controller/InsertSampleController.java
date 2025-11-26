@@ -38,7 +38,7 @@ public class InsertSampleController {
         int todoCount = 10; //투두 몇 개씩 생성할 건지
 
         List<Long> teamIdList = new ArrayList<>();
-        List<Integer> projectIdList = new ArrayList<>();
+        List<Long> projectIdList = new ArrayList<>();
         List<UserEntity> userEntityList = new ArrayList<>();
 
         //1. 유저 먼저 생성
@@ -97,7 +97,7 @@ public class InsertSampleController {
         req.setDeadline(LocalDate.of(2025, 11, 17));
         req.setManagerId("user_1");
         req.setPriority(1);
-        req.setPNo(1);
+        req.setPNo(1L);
 
         todoService.createTodo(req, signupService.findById("user_1"));
 
