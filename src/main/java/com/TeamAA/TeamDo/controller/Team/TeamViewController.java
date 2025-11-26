@@ -1,6 +1,7 @@
 package com.TeamAA.TeamDo.controller.Team;
 
 import com.TeamAA.TeamDo.service.TeamService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +19,26 @@ public class TeamViewController {
         return "create-team"; // resources/templates/create-team.html
     }
 
-    //TODO 민성님 여기 create 2개라서 오류나는 거니까 나중에 고치십셔
-    /*
     // 팀 생성 처리
     @PostMapping("/create")
-    public String createTeam(@RequestParam String name, Model model) {
-        TeamEntity teamEntity = teamService.createTeam(name);
+    public String createTeam(
+            @RequestParam String name,
+            HttpSession session,
+            Model model
+    ) {
+        // 세션에서 로그인한 사용자 ID 가져오기
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            model.addAttribute("error", "로그인이 필요합니다.");
+            return "error";
+        }
+
+        // 팀 생성
+        TeamEntity teamEntity = teamService.createTeam(name, userId);
+
+        // 팀 정보를 뷰에 전달
         model.addAttribute("team", teamEntity);
+
         return "team-success"; // 생성 후 성공 페이지
     }
-
-     */
 }
