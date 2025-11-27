@@ -13,4 +13,4 @@ public interface TeamParticipatingRepository extends JpaRepository<TeamParticipa
     void deleteByUserEntityAndTeamEntity(UserEntity userEntity, TeamEntity teamEntity);
     boolean existsByTeamEntity_IdAndUserEntity_Id(Long teamId, String userId); //팀 ID와 유저 ID로 참여 정보가 존재하는지 확인
 }
-}
+

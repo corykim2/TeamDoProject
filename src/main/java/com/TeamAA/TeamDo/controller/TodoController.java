@@ -41,23 +41,26 @@ public class TodoController {
     @PutMapping("/{todoId}/state")
     public ResponseEntity<TodoEntity> updateTodoState(
             @PathVariable Integer todoId,
-            @RequestBody String newState) {
-        TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState);
+            @RequestBody String newState,
+            @RequestParam String userId) {
+        TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState, userId);
         return ResponseEntity.ok(updatedTodo);
     }
     //DELETE /api/todos/{todoId}:할일 삭제
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Integer todoId) {
-        todoService.deleteTodo(todoId);
+    public ResponseEntity<Void> deleteTodo(@PathVariable Integer todoId,
+                                           @RequestParam String userId) {
+        todoService.deleteTodo(todoId,userId);
         return ResponseEntity.ok().build();
     }
     //PUT /api/todos/{todoId}:할일 수정
     @PatchMapping("/{todoId}")
     public ResponseEntity<TodoEntity> updateTodo(
             @PathVariable Integer todoId,
-            @RequestBody TodoUpdateRequest request) {
+            @RequestBody TodoUpdateRequest request,
+            @RequestParam String userId) {
 
-        TodoEntity updatedTodo = todoService.updateTodoFields(todoId, request);
+        TodoEntity updatedTodo = todoService.updateTodoFields(todoId, request,userId);
         return ResponseEntity.ok(updatedTodo);
     }
 

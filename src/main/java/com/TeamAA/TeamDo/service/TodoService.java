@@ -16,9 +16,13 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository; // Repository 주입
+    private final ProjectService projectService;
 
     // 1. 할 일 생성
     public TodoEntity createTodo(TodoEntity todo) {
+        Long pno = todo.getProjectEntity().getPno();
+        String userId = todo.getUserEntity().getId();
+        projectService.validateUserInProject(pno, userId); //검증 로직 호출
         return todoRepository.save(todo);
     }
 
@@ -34,23 +38,32 @@ public class TodoService {
     }
 
     // 4. 할 일 상태 업데이트
-    public TodoEntity updateTodoState(Integer todoId, String newState) {
+    public TodoEntity updateTodoState(Integer todoId, String newState,String userId) {
         TodoEntity todo = getTodoById(todoId);
         // ⭐️ 상태 변경 로직
+        Long pno = todo.getProjectEntity().getPno();
+        projectService.validateUserInProject(pno, userId);
+        //검증 로직
         todo.setState(newState);
         return todoRepository.save(todo);
     }
     //5. 할일 삭제(본인만 삭제가능 하도록 위해서는 로그인 기능 필요)
-    public TodoEntity deleteTodo(Integer todoId){
+    public TodoEntity deleteTodo(Integer todoId, String userId){
         TodoEntity todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new RuntimeException("해당 Todo가 존재하지 않습니다."));
+        //검증로직
+        Long pno = todo.getProjectEntity().getPno();
+        projectService.validateUserInProject(pno, userId);
         todoRepository.delete(todo);
         return todo;
     }
     //6. 할일 수정
-    public TodoEntity updateTodoFields(Integer todoId, TodoUpdateRequest request) {
+    public TodoEntity updateTodoFields(Integer todoId, TodoUpdateRequest request, String userId) {
         TodoEntity todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new EntityNotFoundException("할 일을 찾을 수 없습니다."));
+        //검증로직
+        Long pno = todo.getProjectEntity().getPno();
+        projectService.validateUserInProject(pno, userId);
 /*
 //로그인기능 필요
         if (!todo.getMangerId().equals(currentUserId)) {
@@ -77,6 +90,7 @@ public class TodoService {
     public List<TodoEntity> findAllTodosSorted(String sortBy, String direction) {
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(sortDirection, sortBy);
+
 
         return todoRepository.findAll(sort);
     }
