@@ -27,7 +27,7 @@ public class SignupController {
 
     @Operation(summary = "회원가입", description = "사용자의 입력을 받아 DB에 사용자의 정보를 저장합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "정상적으로 사용자의 정보를 DB에 저장",
+            @ApiResponse(responseCode = "200", description = "회원가입 성공, 비밀번호 해싱후 정상적으로 사용자의 정보를 DB에 저장,",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = SignupResponse.class),

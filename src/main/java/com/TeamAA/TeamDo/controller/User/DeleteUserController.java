@@ -30,21 +30,27 @@ public class DeleteUserController {
     @Autowired
     private SessionService sessionService;
 
-    @Operation(summary = "회원탈퇴", description = "사용자 비밀번호 받아 회원탈퇴를 진행합니다.")
+    @Operation(summary = "회원탈퇴", description = "사용자의 세션을 검증한 후 비밀번호 받아 DB에 저장된 비밀번호화 일치 한지 확인후 회원탈퇴를 진행합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원탈퇴 성공",
+            @ApiResponse(responseCode = "200", description = "회원탈퇴 성공, DB에 저장된 withDrawn = true 로 변경하는 논리적 삭제",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = DeleteUserResponse.class),
                             examples = @ExampleObject(value = "{\"message\":\"회원탈퇴 완료\"}")
                     )),
-            @ApiResponse(responseCode = "400", description = "입력값 오류, 비밀번호 불일치",
+            @ApiResponse(responseCode = "400", description = "비밀번호 공백입력, 비밀번호 누락",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":400,\"message\":\"비밀번호가 일치하지않습니다.\"}")
+                            examples = @ExampleObject(value = "{\"status\":400,\"message\":\"비밀번호를 입력해주세요\"}")
                     )),
-            @ApiResponse(responseCode = "500", description = "서버 내부 오류",
+            @ApiResponse(responseCode = "401", description = "사용자가 입력한 비밀번호와 DB에 저장된 사용자의 비밀번호와 불일치",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"비밀번호가 일치하지않습니다.\"}")
+                    )),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류, 예기지못한 오류 발생시 예외처리",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),

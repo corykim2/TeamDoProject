@@ -28,7 +28,7 @@ public class LoginController {
 
     @Operation(summary = "로그인", description = "사용자 입력을 받아 DB에 저장된 user와 일치하는지 확인하고 로그인을 진행합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공",
+            @ApiResponse(responseCode = "200", description = "로그인 성공, 세션을 생성해서 브라우저에 쿠키로 전송",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = LoginResponse.class),
