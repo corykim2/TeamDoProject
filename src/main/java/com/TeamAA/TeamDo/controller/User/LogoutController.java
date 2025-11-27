@@ -23,7 +23,12 @@ public class LogoutController {
     @Autowired
     private SessionService sessionService;
 
-    @Operation(summary = "로그아웃", description = "사용자 입력을 받아 로그아웃을 진행합니다.")
+    @Operation(summary = "로그아웃",
+            description = """
+                    /sessions/delete<br>
+                    사용자 입력을 받아 로그아웃을 진행합니다.
+                    """
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그아웃 성공, 세션 객체 제거, 더이상 접근불가능",
                     content = @Content(

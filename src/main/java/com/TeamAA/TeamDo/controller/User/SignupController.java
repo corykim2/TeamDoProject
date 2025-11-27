@@ -25,7 +25,13 @@ public class SignupController {
     @Autowired
     private SignupService signupService;
 
-    @Operation(summary = "회원가입", description = "사용자의 입력을 받아 DB에 사용자의 정보를 저장합니다.")
+    @Operation(
+            summary = "회원가입",
+            description = """
+                    /users/create<br>
+                    사용자의 입력을 받아 DB에 사용자를 생성합니다.
+                    """
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공, 비밀번호 해싱후 정상적으로 사용자의 정보를 DB에 저장,",
                     content = @Content(
@@ -54,12 +60,6 @@ public class SignupController {
                                     @ExampleObject(name = "이메일 중복", value = "{\"status\":409,\"message\":\"이미 존재하는 이메일입니다.\"}")
                             }
                     )),
-//            @ApiResponse(responseCode = "409", description = "DB에 저장된 email과 사용자의 입력값이 중복",
-//                  content = @Content(
-//                            mediaType = "application/json",
-//                           schema = @Schema(implementation = ErrorResponse.class),
-//                            examples = @ExampleObject(value = "{\"status\":409,\"message\":\"이미 존재하는 이메일입니다.\"}")
-//                   )),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류, 예기지못한 오류 발생시 예외처리",
                     content = @Content(
                             mediaType = "application/json",

@@ -30,7 +30,14 @@ public class DeleteUserController {
     @Autowired
     private SessionService sessionService;
 
-    @Operation(summary = "회원탈퇴", description = "사용자의 세션을 검증한 후 비밀번호 받아 DB에 저장된 비밀번호화 일치 한지 확인후 회원탈퇴를 진행합니다.")
+    @Operation(
+            summary = "회원탈퇴",
+            description = """
+                   /users/delete<br>
+                   사용자의 세션을 검증한 후 비밀번호 받아 DB에 저장된 비밀번호화 일치 한지 확인후 회원탈퇴를 진행합니다.<br>
+                   세션을 소유한 본인만 탈퇴가 가능하기 때문에 /users/me 
+                    """
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공, DB에 저장된 withDrawn = true 로 변경하는 논리적 삭제",
                     content = @Content(
