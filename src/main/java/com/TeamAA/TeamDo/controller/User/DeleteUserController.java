@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class DeleteUserController {
                     ))
     })
     @DeleteMapping("/me")
-    public ResponseEntity<DeleteUserResponse> deleteUser(@RequestBody DeleteUserRequest request, HttpSession session) {
+    public ResponseEntity<DeleteUserResponse> deleteUser(@Valid @RequestBody DeleteUserRequest request, HttpSession session) {
         String userId = sessionService.getUserId(session); //세션검증
         UserEntity user = deleteUserService.deleteUser(userId, request);
         session.invalidate();
