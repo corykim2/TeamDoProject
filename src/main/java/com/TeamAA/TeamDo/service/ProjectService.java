@@ -23,7 +23,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final TeamRepository teamRepository; // 6. TeamRepository 주입
     private final UserRepository userRepository; // 7. UserRepository 주입
-
+    private final TeamParticipatingRepository teamParticipatingRepository;//팀 참여 여부를 확인하기 위해 주입
 
     @Transactional // 8. 데이터를 생성/수정/삭제할 땐 @Transactional 권장
     public ProjectEntity createProject(ProjectCreateRequest dto) {
@@ -113,4 +113,22 @@ public class ProjectService {
         return (int) Math.round(((double) completedCount / todos.size()) * 100);
     }
 
+    public void validateUserInProject(Long projectId, String userId) {
+
+        // 1. 프로젝트 정보 가져오기 (어떤 팀인지 알아야 하니까)
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 프로젝트입니다."));
+
+        // 2. 프로젝트가 속한 팀의 ID 추출
+        Long teamId = project.getTeamEntity().getId();
+
+        // 3. 해당 팀에 유저가 참여 중인지 확인 (Repository 호출)
+        boolean isMember = teamParticipatingRepository.existsByTeamEntity_IdAndUserEntity_Id(teamId, userId);
+
+        // 4. 참여자가 아니라면 에러 발생 (권한 없음)
+        if (!isMember) {
+            throw new IllegalArgumentException("해당 프로젝트에 접근 권한이 없습니다. (팀 멤버가 아님)");
+            // 나중에 security 적용시 AccessDeniedException 등을 사용하면 좋음
+        }
+    }
 }
