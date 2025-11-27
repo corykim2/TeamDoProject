@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.entity.User.UserEntity;
-import com.TeamAA.TeamDo.repository.User.UserRepository;
+import com.TeamAA.TeamDo.entity.UserEntity;
+import com.TeamAA.TeamDo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

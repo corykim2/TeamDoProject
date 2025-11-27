@@ -1,6 +1,6 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.dto.DeleteUserRequest;
+import com.TeamAA.TeamDo.dto.User.DeleteUserRequest;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;

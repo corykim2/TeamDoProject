@@ -1,7 +1,8 @@
 package com.TeamAA.TeamDo.service;
 
+import com.TeamAA.TeamDo.controller.exceptionhandler.InvalidCredentialsException;
 import com.TeamAA.TeamDo.controller.exceptionhandler.WithdrawnUserException;
-import com.TeamAA.TeamDo.dto.LoginRequest;
+import com.TeamAA.TeamDo.dto.User.LoginRequest;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,48 +14,37 @@ public class LoginService {
     @Autowired
     private SignupService signupService;
 
+    // 사용자 조회,존재하지 않는 아이디 예외처리
+
     public UserEntity login(LoginRequest request) {
+        try {
+            UserEntity user;
 
-            // 입력데이터 부족 예외처리
-            if (request.getId() == null || request.getId().isBlank()) {
-                throw new IllegalArgumentException("아이디를 입력해 주세요.");
+            // 아이디 존재 여부 확인
+            try {
+                user = signupService.findById(request.getId());
+            } catch (Exception e) {
+                // 아이디 없음 → 401
+                throw new InvalidCredentialsException("아이디 또는 비밀번호가 잘못 되었습니다.");
             }
 
-            if (request.getPassword() == null || request.getPassword().isBlank()) {
-                throw new IllegalArgumentException("비밀번호를 입력해 주세요.");
-            }
-
-            //데이터 범위 초과 예외처리
-            if (request.getId().length() >= 30) {
-                throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다.");
-            }
-
-            if (request.getPassword().length() < 5 || request.getPassword().length() >= 16) {
-                throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다.");
-            }
-
-            // 사용자 조회,존재하지 않는 아이디 예외처리
-        try{
-            UserEntity user = signupService.findById(request.getId());
-
-            // 탈퇴 확인 예외처리
+            // 탈퇴 계정
             if (user.isWithdrawn()) {
-                throw new WithdrawnUserException("탈퇴한 사용자입니다."); // 글로벌 핸들러에서 403 처리
+                throw new WithdrawnUserException("탈퇴한 사용자입니다."); // 403
             }
 
-            // 비밀번호 검증 예외처리 (해싱)
+            // 비밀번호 불일치
             if (!BCrypt.checkpw(request.getPassword(), user.getPassword())) {
-                throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다.");
+                throw new InvalidCredentialsException("아이디 또는 비밀번호가 잘못 되었습니다."); // 401
             }
+
             return user;
-        } catch(IllegalArgumentException e) {
+
+        } catch (WithdrawnUserException | InvalidCredentialsException e) {
             throw e;
 
-        } catch(WithdrawnUserException e) {
-            throw e;
-
-        } catch(Exception e){
-                throw new RuntimeException("로그인 처리 중 문제가 발생하였습니다. 다시 시도해주세요.", e);
+        } catch (Exception e) {
+            throw new RuntimeException("로그인 처리 중 문제가 발생하였습니다. 다시 시도해주세요.", e);
         }
     }
 }

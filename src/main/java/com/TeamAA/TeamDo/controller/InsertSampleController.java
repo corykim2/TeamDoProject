@@ -3,7 +3,7 @@ package com.TeamAA.TeamDo.controller;
 //이거 여기로 요청 넣으면 예시데이터 넣으려고 만드는 거에요
 
 import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
-import com.TeamAA.TeamDo.dto.SignupRequest;
+import com.TeamAA.TeamDo.dto.User.SignupRequest;
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
 import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
