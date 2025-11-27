@@ -6,6 +6,7 @@ import com.TeamAA.TeamDo.entity.Team.TeamEntity;     // 2. Team 엔티티 임포
 import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import com.TeamAA.TeamDo.entity.User.UserEntity;     // 3. User 엔티티 임포트
 import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
+import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
 import com.TeamAA.TeamDo.repository.Team.TeamRepository; // 4. Team 리포지토리 임포트
 import com.TeamAA.TeamDo.repository.User.UserRepository; // 5. User 리포지토리 임포트
 import com.TeamAA.TeamDo.dto.ProjectUpdateRequest;

@@ -4,8 +4,6 @@ import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
 import com.TeamAA.TeamDo.dto.ProjectUpdateRequest;
 import com.TeamAA.TeamDo.dto.Project.ProjectResponse;
 import com.TeamAA.TeamDo.entity.Project.ProjectEntity; // 1. 엔티티 이름 변경 반영
-import com.TeamAA.TeamDo.dto.ProjectResponse;
-import com.TeamAA.TeamDo.entity.ProjectEntity;
 import com.TeamAA.TeamDo.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
