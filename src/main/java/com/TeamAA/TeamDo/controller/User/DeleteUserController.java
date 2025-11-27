@@ -1,8 +1,8 @@
 package com.TeamAA.TeamDo.controller.User;
 
-import com.TeamAA.TeamDo.dto.DeleteUserRequest;
-import com.TeamAA.TeamDo.dto.DeleteUserResponse;
-import com.TeamAA.TeamDo.dto.ErrorResponse;
+import com.TeamAA.TeamDo.dto.User.DeleteUserRequest;
+import com.TeamAA.TeamDo.dto.User.DeleteUserResponse;
+import com.TeamAA.TeamDo.dto.User.ErrorResponse;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.service.DeleteUserService;
 import com.TeamAA.TeamDo.service.SessionService;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "유저관리", description = "유저관리 엔드포인트")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users")
 public class DeleteUserController {
 
     @Autowired
@@ -50,7 +50,7 @@ public class DeleteUserController {
                             examples = @ExampleObject(value = "{\"status\":500,\"message\":\"회원탈퇴 처리 중 문제가 발생했습니다.\"}")
                     ))
     })
-    @PostMapping("/delete")
+    @DeleteMapping("/me")
     public ResponseEntity<DeleteUserResponse> deleteUser(@RequestBody DeleteUserRequest request, HttpSession session) {
         String userId = sessionService.getUserId(session); //세션검증
         UserEntity user = deleteUserService.deleteUser(userId, request);

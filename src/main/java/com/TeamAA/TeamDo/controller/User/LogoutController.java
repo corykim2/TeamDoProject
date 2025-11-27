@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.controller.User;
 
-import com.TeamAA.TeamDo.dto.ErrorResponse;
-import com.TeamAA.TeamDo.dto.LogoutResponse;
+import com.TeamAA.TeamDo.dto.User.ErrorResponse;
+import com.TeamAA.TeamDo.dto.User.LogoutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,7 +17,7 @@ import com.TeamAA.TeamDo.service.SessionService;
 
 @Tag(name = "유저관리", description = "유저관리 엔드포인트")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/sessions")
 public class LogoutController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class LogoutController {
                             examples = @ExampleObject(value = "{\"status\":500,\"message\":\"로그아웃 처리 중 문제가 발생했습니다.\"}")
                     ))
     })
-    @PostMapping("/logout")
+    @DeleteMapping("")
     public ResponseEntity<String> logout(HttpSession session) {
         //정상 처리 로직
         try {
