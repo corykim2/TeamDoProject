@@ -77,7 +77,10 @@ public class ProjectController {
     @Operation(summary = "프로젝트 수정", description = "pno(ID)로 프로젝트 1건의 이름(pname)과 소속 팀(teamId)을 수정합니다.")
     @PutMapping("/{pno}")
     public ProjectEntity updateProject(@PathVariable Long pno,
-                                       @RequestBody ProjectUpdateRequest requestDto) {
-        return projectService.updateProject(pno, requestDto);
+                                       @RequestBody ProjectUpdateRequest requestDto,
+                                       @RequestParam String userId) {
+        projectService.validateUserInProject(Long.valueOf(pno), userId);
+
+        return projectService.updateProject(Long.valueOf(pno), requestDto);
     }
 }
