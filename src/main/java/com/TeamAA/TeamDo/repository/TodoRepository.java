@@ -13,6 +13,8 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 
     List<TodoEntity> findByProjectEntity_pno(Integer pNo);
 
+    List<TodoEntity> findByProjectEntity_pnoAndStateNot(int i, String 완료);
+
     //상태(state)와 마감일(deadline)로 할 일 찾기
     //List<TodoEntity> findByStateAndDeadlineBefore(String state, LocalDate deadline);
 
