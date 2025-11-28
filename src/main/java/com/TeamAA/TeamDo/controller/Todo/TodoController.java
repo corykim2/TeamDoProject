@@ -1,6 +1,5 @@
 package com.TeamAA.TeamDo.controller.Todo;
 
-//import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
 import com.TeamAA.TeamDo.dto.Todo.TodoStateUpdateRequest;
 import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
@@ -8,31 +7,27 @@ import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
 import com.TeamAA.TeamDo.service.TodoService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Tag(name = "Todo", description = "할 일(Todo) 관련 API")
 @RestController // 이 클래스가 REST API 컨트롤러임을 명시
-@RequestMapping("/api/todos") // 기본 URL 경로 설정
+@RequestMapping("/api") // 기본 URL 경로 설정
 @RequiredArgsConstructor
 public class TodoController {
 
     private final TodoService todoService;
-    @Autowired
-    private TodoRepository todoRepository;
 
     // POST /api/todos : 새로운 할 일 생성
     @Operation(summary = "할 일 생성", description = "할일 이름,담당자,마감일,우선순위를 입력받아 새로운 할 일을 생성합니다.")
-    @PostMapping("/create")
+    @PostMapping("/todos")
     public ResponseEntity<?> createTodo(@RequestBody TodoCreateRequest requestDto, HttpServletRequest request) {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
 
@@ -42,18 +37,18 @@ public class TodoController {
 
     // GET /api/todos/{todoId} : 특정 할 일 조회
     @Operation(summary = "특정 할 일 조회", description = "선택한 할 일을 상세(생성자,생성시간 포함)조회합니다. 수정,삭제선택창 접속용")
-    @GetMapping("/{todoId}")
+    @GetMapping("/todos/{todoId}")
     public ResponseEntity<TodoEntity> getTodo(
             @Parameter(description = "할 일 ID")
             @PathVariable Long todoId,HttpServletRequest request) {
-        //UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
+        UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         TodoEntity todo = todoService.getTodoById(todoId);
         return ResponseEntity.ok(todo);
     }
 
-    // GET /api/todos/project/{pNo} : 프로젝트별 할 일 조회
+    // GET /api/project/{pNo}/todos : 프로젝트별 할 일 조회
     @Operation(summary = "프로젝트별 할 일 조회", description = "프로젝트별 본인 포함 다른 팀원의 할일을 전체 조회합니다.")
-    @GetMapping("/project/{pNo}")
+    @GetMapping("/project/{pNo}/todos")
     public ResponseEntity<List<TodoEntity>> getTodosByProject(
             @Parameter (description="프로젝트 번호")
             @PathVariable Long pno,HttpServletRequest request) {
@@ -69,45 +64,37 @@ public class TodoController {
     }
 
     // PUT /api/todos/{todoId}/state : 할 일 상태 업데이트
-    @Operation(summary = "할 일 상태 업데이트", description = "메인페이지에서 할 일 상태를(완료,보류,진행중,디버깅등) 업데이트합니다.")
-    @PutMapping("/{todoId}/state")
+    @Operation(summary = "할 일 상태 업데이트", description = "메인페이지에서 할 일 상태를(완료,보류,진행중,디버깅등) 업데이트합니다.(담당자만)")
+    @PutMapping("/todos/{todoId}/state")
     public ResponseEntity<?> updateTodoState(
             @Parameter(description = "할 일 ID,할 일 상태 업데이트 요청 DTO")
             @PathVariable Long todoId,
             @RequestBody TodoStateUpdateRequest requestDto,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws IllegalAccessException {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
-        TodoEntity todo = todoService.getTodoById(todoId);
-        if (!todo.getCreatorId().getId().equals(loginUser.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인의 할 일만 상태수정 가능합니다.");
-        }
         String newState = requestDto.getState();
         TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState,loginUser);
         return ResponseEntity.ok(updatedTodo);
     }
     //DELETE /api/todos/{todoId}:할일 삭제
-    @Operation(summary = "할 일 삭제", description = "할 일을 삭제합니다.(생성자만)")
-    @DeleteMapping("/{todoId}")
+    @Operation(summary = "할 일 삭제", description = "상세조회에서 할 일을 삭제합니다.(생성자만)")
+    @DeleteMapping("/todos/{todoId}")
     public ResponseEntity<?> deleteTodo(
             @Parameter(description = "할 일 ID")
-            @PathVariable Long todoId,HttpServletRequest request) {
+            @PathVariable Long todoId,HttpServletRequest request) throws IllegalAccessException {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
         todoService.deleteTodo(todoId,loginUser);
         return ResponseEntity.ok().build();
     }
 
     //PUT /api/todos/{todoId}:할일 수정
-    @Operation(summary = "할 일 수정", description = "할 일을 수정합니다.")
-    @PatchMapping("/{todoId}")
+    @Operation(summary = "할 일 수정", description = "상세조회에서 담당자,마감일,할 일 이름,우선순위를 입력받아 할 일을 수정합니다.(생성자만)")
+    @PatchMapping("/todos/{todoId}")
     public ResponseEntity<?> updateTodo(
             @Parameter(description = "할 일 ID,할 일 업데이트 요청 DTO")
             @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequest UpdateRequest,HttpServletRequest request) {
+            @RequestBody TodoUpdateRequest UpdateRequest,HttpServletRequest request) throws IllegalAccessException {
         UserEntity loginUser = (UserEntity) request.getAttribute("loginUser");
-        TodoEntity todo = todoService.getTodoById(todoId);
-        if (!todo.getCreatorId().getId().equals(loginUser.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("본인의 할 일만 수정 가능합니다.");
-        }
         TodoEntity updatedTodo = todoService.updateTodoFields(todoId, UpdateRequest,loginUser);
         return ResponseEntity.ok(updatedTodo);
     }
@@ -115,6 +102,7 @@ public class TodoController {
 
     //GET api/todos:할일 정렬
     @Operation(summary = "할 일 정렬", description = "할 일을 정렬합니다.")
+    @Hidden
     @GetMapping("/todos")
     public ResponseEntity<List<TodoEntity>> getAllTodos(
             @Parameter(description = "정렬 기준 속성 및 방향")

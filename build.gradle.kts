@@ -44,6 +44,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("com.h2database:h2") // 테스트용 인메모리 DB 추가
 }
 
 tasks.withType<Test> {
