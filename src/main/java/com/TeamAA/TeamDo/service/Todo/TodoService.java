@@ -1,7 +1,7 @@
-package com.TeamAA.TeamDo.service;
+package com.TeamAA.TeamDo.service.Todo;
 
-import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoCreateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoUpdateRequest;
 import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Project.ProjectRepository;

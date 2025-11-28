@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.TeamAA.TeamDo.service.SessionService;
+import com.TeamAA.TeamDo.service.User.SessionService;
 
 @Tag(name = "유저관리", description = "유저관리 엔드포인트")
 @RestController

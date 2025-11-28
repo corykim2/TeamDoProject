@@ -1,6 +1,6 @@
-package com.TeamAA.TeamDo.service;
+package com.TeamAA.TeamDo.service.Project;
 
-import com.TeamAA.TeamDo.dto.ProjectCreateRequest;
+import com.TeamAA.TeamDo.dto.Project.ProjectCreateRequest;
 import com.TeamAA.TeamDo.entity.Project.ProjectEntity; // 1. 엔티티 임포트 (이름 변경됨)
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;     // 2. Team 엔티티 임포트
 import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
@@ -9,7 +9,7 @@ import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
 import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
 import com.TeamAA.TeamDo.repository.Team.TeamRepository; // 4. Team 리포지토리 임포트
 import com.TeamAA.TeamDo.repository.User.UserRepository; // 5. User 리포지토리 임포트
-import com.TeamAA.TeamDo.dto.ProjectUpdateRequest;
+import com.TeamAA.TeamDo.dto.Project.ProjectUpdateRequest;
 import com.TeamAA.TeamDo.dto.Project.ProjectResponse;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

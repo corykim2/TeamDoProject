@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.Interceptor;
 
 import com.TeamAA.TeamDo.entity.User.UserEntity;
-import com.TeamAA.TeamDo.service.SessionService;
+import com.TeamAA.TeamDo.service.User.SessionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

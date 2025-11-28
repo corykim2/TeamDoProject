@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.service;
+package com.TeamAA.TeamDo.service.Team;
 
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
 import com.TeamAA.TeamDo.entity.Team.TeamParticipatingEntity;

@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.controller.Team;
 
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
-import com.TeamAA.TeamDo.service.TeamService;
+import com.TeamAA.TeamDo.service.Team.TeamService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

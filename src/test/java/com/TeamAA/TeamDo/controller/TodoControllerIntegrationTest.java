@@ -1,7 +1,7 @@
 package com.TeamAA.TeamDo.controller;
 
-import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoCreateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoUpdateRequest;
 import com.TeamAA.TeamDo.entity.ProjectEntity;
 import com.TeamAA.TeamDo.entity.TodoEntity;
 import com.TeamAA.TeamDo.entity.UserEntity;

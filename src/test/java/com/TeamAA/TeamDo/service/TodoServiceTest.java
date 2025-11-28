@@ -1,12 +1,13 @@
 package com.TeamAA.TeamDo.service;
 
-import com.TeamAA.TeamDo.dto.TodoCreateRequest;
+import com.TeamAA.TeamDo.dto.Todo.TodoCreateRequest;
 import com.TeamAA.TeamDo.entity.ProjectEntity;
 import com.TeamAA.TeamDo.entity.TodoEntity;
 import com.TeamAA.TeamDo.entity.UserEntity;
 import com.TeamAA.TeamDo.repository.ProjectRepository;
 import com.TeamAA.TeamDo.repository.TodoRepository;
 import com.TeamAA.TeamDo.repository.UserRepository;
+import com.TeamAA.TeamDo.service.Todo.TodoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.service;
+package com.TeamAA.TeamDo.service.User;
 
 import com.TeamAA.TeamDo.controller.exceptionhandler.InvalidCredentialsException;
 import com.TeamAA.TeamDo.dto.User.DeleteUserRequest;

@@ -4,7 +4,7 @@ import com.TeamAA.TeamDo.dto.User.ErrorResponse;
 import com.TeamAA.TeamDo.dto.User.LoginRequest;
 import com.TeamAA.TeamDo.dto.User.LoginResponse;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
-import com.TeamAA.TeamDo.service.LoginService;
+import com.TeamAA.TeamDo.service.User.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

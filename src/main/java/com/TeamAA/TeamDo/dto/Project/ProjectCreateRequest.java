@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.dto;
+package com.TeamAA.TeamDo.dto.Project;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

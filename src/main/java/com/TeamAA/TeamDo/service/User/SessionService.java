@@ -1,4 +1,4 @@
-package com.TeamAA.TeamDo.service;
+package com.TeamAA.TeamDo.service.User;
 
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
