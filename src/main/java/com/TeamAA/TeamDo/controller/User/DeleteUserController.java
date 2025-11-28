@@ -29,8 +29,29 @@ public class DeleteUserController {
 
     @Autowired
     private SessionService sessionService;
+    @Operation(
+            summary = "회원탈퇴",
+            description = """
+        /users/delete<br>
+        
+        [결론]
+        로그인된 사용자가 본인 인증(비밀번호 확인)에 성공하면 계정 상태를 ‘탈퇴’로 업데이트합니다.
 
-    @Operation(summary = "회원탈퇴", description = "사용자의 세션을 검증한 후 비밀번호 받아 DB에 저장된 비밀번호화 일치 한지 확인후 회원탈퇴를 진행합니다.")
+        [사용 화면]
+        - 마이페이지 > [회원탈퇴] 버튼 클릭 시
+
+        [로직 설명]
+        1. 요청에 포함된 JSESSIONID 쿠키를 이용해 현재 세션을 조회합니다.
+        2. 세션에 저장된 사용자 정보(userId)를 기반으로 탈퇴 대상 계정을 식별합니다.
+        3. 클라이언트가 입력한 비밀번호를 DB에 저장된 passwordHash와 비교하여 본인 여부를 검증합니다.
+        4. 비밀번호 검증에 성공하면 해당 사용자 레코드의 withDrawn 값을 true 로 변경하여 논리적 삭제를 처리합니다.
+        5. 탈퇴 처리 이후 HttpSession.invalidate()를 호출하여 세션을 종료합니다.
+
+        [참조 테이블]
+        - UPDATE: user (withDrawn = true)
+        - SELECT: user
+        """
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공, DB에 저장된 withDrawn = true 로 변경하는 논리적 삭제",
                     content = @Content(

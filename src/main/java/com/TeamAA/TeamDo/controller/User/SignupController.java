@@ -25,7 +25,29 @@ public class SignupController {
     @Autowired
     private SignupService signupService;
 
-    @Operation(summary = "회원가입", description = "사용자의 입력을 받아 DB에 사용자의 정보를 저장합니다.")
+    @Operation(
+            summary = "회원가입",
+            description = """
+        /users/create<br>
+        
+        [결론]
+        입력된 사용자 정보를 검증한 뒤 신규 사용자 1건을 생성합니다.
+
+        [사용 화면]
+        - 회원가입 페이지 > [회원가입 완료] 버튼 클릭 시
+
+        [로직 설명]
+        1. 요청받은 userId, password, name, email 필수 입력값의 형식을 검증합니다.
+        2. userId(또는 이메일)가 기존 DB에 이미 ,존재하는지 중복 여부를 조회합니다.
+        3. 중복이 없으면 password를 서버에서 해시(BCrypt 등)하여 저장 가능한 형태로 변환합니다.
+        4. 변환된 정보로 신규 사용자 엔티티를 생성하고 DB에 저장합니다.
+        5. 회원가입 성공 결과를 클라이언트에 반환합니다.
+
+        [참조 테이블]
+        - INSERT: user
+        - SELECT: user
+        """
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공, 비밀번호 해싱후 정상적으로 사용자의 정보를 DB에 저장,",
                     content = @Content(

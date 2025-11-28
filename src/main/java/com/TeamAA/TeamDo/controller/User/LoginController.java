@@ -26,7 +26,27 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @Operation(summary = "로그인", description = "사용자 입력을 받아 DB에 저장된 user와 일치하는지 확인하고 로그인을 진행합니다.")
+ @Operation(
+         summary = "로그인",
+         description = """
+        /sessions/create<br>
+        
+        [결론]
+        사용자 입력(id, password)을 검증하여 로그인 세션을 생성합니다.
+
+        [사용 화면]
+        - 로그인 페이지 > 로그인 버튼 클릭 시
+
+        [로직 설명]
+        1. 요청받은 userId에 해당하는 사용자가 DB에 존재하는지 조회합니다.
+        2. 사용자가 존재할 경우, 입력된 password와 DB의 passwordHash를 비교하여 일치 여부를 검증합니다.
+        3. 검증 통과 시 로그인 처리를 진행하고 세션에 사용자 정보를 저장합니다.
+        4. 서버는 세션 ID를 포함한 JSESSIONID 쿠키를 클라이언트에 자동으로 발급합니다.
+
+        [참조 테이블]
+        - SELECT: user
+        """
+ )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공, 세션을 생성해서 브라우저에 쿠키로 전송",
                     content = @Content(
