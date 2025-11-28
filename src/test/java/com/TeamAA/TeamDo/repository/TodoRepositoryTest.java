@@ -1,8 +1,12 @@
 package com.TeamAA.TeamDo.repository;
 
-import com.TeamAA.TeamDo.entity.ProjectEntity;
-import com.TeamAA.TeamDo.entity.TodoEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
+
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
+import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,12 +45,12 @@ public class TodoRepositoryTest {
 
         // 2. 테스트 프로젝트 설정
         project1 = new ProjectEntity();
-        project1.setPno(100);
+        project1.setPno(1L);
         project1.setPname("Project Alpha");
         projectRepository.save(project1);
 
         project2 = new ProjectEntity();
-        project2.setPno(200);
+        project2.setPno(2L);
         project2.setPname("Project Beta");
         projectRepository.save(project2);
 
@@ -80,8 +84,8 @@ public class TodoRepositoryTest {
     @DisplayName("1. findByProjectEntity_pno: 프로젝트별 Todo 조회 성공")
     void findByProjectEntity_pno_Success() {
         // When
-        List<TodoEntity> todosAlpha = todoRepository.findByProjectEntity_pno(100);
-        List<TodoEntity> todosBeta = todoRepository.findByProjectEntity_pno(200);
+        List<TodoEntity> todosAlpha = todoRepository.findByProjectEntity_pno(1L);
+        List<TodoEntity> todosBeta = todoRepository.findByProjectEntity_pno(2L);
 
         // Then
         assertEquals(3, todosAlpha.size());

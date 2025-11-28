@@ -1,13 +1,12 @@
 package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.Todo.TodoCreateRequest;
-import com.TeamAA.TeamDo.entity.ProjectEntity;
-import com.TeamAA.TeamDo.entity.TodoEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.ProjectRepository;
-import com.TeamAA.TeamDo.repository.TodoRepository;
-import com.TeamAA.TeamDo.repository.UserRepository;
-import com.TeamAA.TeamDo.service.Todo.TodoService;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
+import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +58,7 @@ public class TodoServiceTest {
 
         // 2. 테스트용 프로젝트 설정
         testProject = new ProjectEntity();
-        testProject.setPno(99);
+        testProject.setPno(1L);
 
         // 3. 테스트용 Todo 설정
         testTodo = new TodoEntity();
@@ -83,12 +82,12 @@ public class TodoServiceTest {
         TodoCreateRequest requestDto = new TodoCreateRequest();
         requestDto.setName("새로운 할 일");
         requestDto.setManagerId(managerUser.getId());
-        requestDto.setPNo(99);
+        requestDto.setPNo(1L);
         requestDto.setDeadline(LocalDate.now());
         requestDto.setPriority(1);
 
         // Mocking: Repository 호출 설정
-        when(projectRepository.findByPno(anyInt())).thenReturn(testProject);
+        when(projectRepository.findByPno(anyLong())).thenReturn(testProject);
         when(userRepository.findById(managerUser.getId())).thenReturn(Optional.of(managerUser));
         when(todoRepository.save(any(TodoEntity.class))).thenReturn(testTodo);
 
@@ -204,13 +203,13 @@ public class TodoServiceTest {
 
         // Mocking: Repository는 모든 Todo를 반환한다고 가정
         List<TodoEntity> allTodos = Arrays.asList(completeTodo, incompleteTodo1, testTodo);
-        when(todoRepository.findByProjectEntity_pno(anyInt())).thenReturn(allTodos);
+        when(todoRepository.findByProjectEntity_pno(anyLong())).thenReturn(allTodos);
 
         // TodoService의 getTodosByProjectEntity 시그니처가 loginUser를 받도록 수정되어야 합니다.
         // 현재는 편의상 pNo만 받도록 테스트합니다.
 
         // When
-        List<TodoEntity> result = todoService.getTodosByProjectEntity(99);
+        List<TodoEntity> result = todoService.getTodosByProjectEntity(1L);
 
         // Then
         // 결과 목록에 '완료' 상태의 Todo가 포함되지 않아야 합니다.
