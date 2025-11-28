@@ -2,11 +2,11 @@ package com.TeamAA.TeamDo.controller;
 
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
 import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
-import com.TeamAA.TeamDo.entity.ProjectEntity;
-import com.TeamAA.TeamDo.entity.TodoEntity;
-import com.TeamAA.TeamDo.entity.UserEntity;
-import com.TeamAA.TeamDo.repository.TodoRepository;
-import com.TeamAA.TeamDo.repository.UserRepository;
+import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Todo.TodoEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,7 +70,7 @@ public class TodoControllerIntegrationTest {
 
         // 2. 테스트용 프로젝트 생성 (ProjectEntity에 setPno가 있다고 가정)
         testProject = new ProjectEntity();
-        testProject.setPno(99);
+        testProject.setPno(1L);
         // projectRepository.save(testProject); // 실제 DB에 저장 필요
     }
 
@@ -80,7 +80,7 @@ public class TodoControllerIntegrationTest {
         TodoCreateRequest requestDto = new TodoCreateRequest();
         requestDto.setName("테스트 할 일");
         requestDto.setManagerId(creatorUser.getId()); // ⭐️ String ID 사용
-        requestDto.setPNo(99);
+        requestDto.setPNo(1L);
         requestDto.setDeadline(LocalDate.now().plusDays(1));
         requestDto.setPriority(1);
 
