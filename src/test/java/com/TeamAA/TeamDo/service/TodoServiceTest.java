@@ -1,7 +1,6 @@
 package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.TodoCreateRequest;
-import com.TeamAA.TeamDo.dto.TodoUpdateRequest;
 import com.TeamAA.TeamDo.entity.ProjectEntity;
 import com.TeamAA.TeamDo.entity.TodoEntity;
 import com.TeamAA.TeamDo.entity.UserEntity;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
