@@ -72,7 +72,7 @@ class ProjectIntegrationTest {
                 {
                     "pname": "새로운 프로젝트",
                     "teamId": %d,
-                    "managerId": "%s"
+                    "userId": "%s"
                 }
                 """.formatted(team.getId(), user.getId());
 
