@@ -43,8 +43,11 @@ public class ProjectController {
             """
     )
     @PostMapping("/project/registration")
-    public ProjectEntity createProject(@RequestBody ProjectCreateRequest requestDto) {
-        return projectService.createProject(requestDto);
+    public ResponseEntity<ProjectResponse> createProject(@RequestBody ProjectCreateRequest requestDto) {
+        ProjectEntity createdProject = projectService.createProject(requestDto);
+        // 생성 직후라 진행률은 0%
+        ProjectResponse response = new ProjectResponse(createdProject, 0);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -96,12 +99,14 @@ public class ProjectController {
             """
     )
     @PutMapping("/project/modification/by-pno/{pno}")
-    public ProjectEntity updateProject(@PathVariable Long pno,
+    public ResponseEntity<ProjectResponse> updateProject(@PathVariable Long pno,
                                        @RequestBody ProjectUpdateRequest requestDto,
                                        @RequestParam String userId) {
 
         projectService.validateUserInProject(pno, userId);
-        return projectService.updateProject(pno, requestDto);
+        ProjectEntity updatedProject = projectService.updateProject(pno, requestDto);
+        ProjectResponse response = new ProjectResponse(updatedProject, 0);
+        return ResponseEntity.ok(response);
     }
 
     /**
