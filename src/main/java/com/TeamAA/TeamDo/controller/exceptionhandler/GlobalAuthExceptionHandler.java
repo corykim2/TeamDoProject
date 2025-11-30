@@ -12,7 +12,7 @@ public class    GlobalAuthExceptionHandler {
 
     //아이디, 이메일 중복 처리
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicate(InvalidCredentialsException e) {
+    public ResponseEntity<ErrorResponse> handleDuplicate(DuplicateException e) {
         ErrorResponse error = new ErrorResponse(409,e.getMessage());
         return ResponseEntity.status(409).body(error);
     }
