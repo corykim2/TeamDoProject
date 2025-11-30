@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.service.User;
 
+import com.TeamAA.TeamDo.controller.exceptionhandler.DuplicateException;
 import com.TeamAA.TeamDo.controller.exceptionhandler.InvalidCredentialsException;
 import com.TeamAA.TeamDo.controller.exceptionhandler.WithdrawnUserException;
 import com.TeamAA.TeamDo.dto.User.SignupRequest;
@@ -22,12 +23,12 @@ public class SignupService {
             if (user.isWithdrawn()) {
                 throw new WithdrawnUserException("탈퇴한 사용자 입니다. 탈퇴한 사용자는 재가입이 불가능합니다.");
             }
-            throw new InvalidCredentialsException("이미 존재하는 아이디입니다.");
+            throw new DuplicateException("이미 존재하는 아이디입니다.");
         });
 
         // 이메일 중복 체크
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new InvalidCredentialsException("이미 존재하는 이메일입니다.");
+            throw new DuplicateException("이미 존재하는 이메일입니다.");
         }
 
         try {
