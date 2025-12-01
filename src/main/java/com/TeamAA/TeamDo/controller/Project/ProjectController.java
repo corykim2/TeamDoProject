@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.controller.Project;
 
+import com.TeamAA.TeamDo.dto.*;
 import com.TeamAA.TeamDo.dto.Project.ProjectCreateRequest;
 import com.TeamAA.TeamDo.dto.Project.ProjectUpdateRequest;
 import com.TeamAA.TeamDo.dto.Project.ProjectResponse;
@@ -72,8 +73,9 @@ public class ProjectController {
             """
     )
     @GetMapping("/project/detail/by-pno/{pno}")
-    public ProjectResponse getProject(@PathVariable Long pno) {
-        return projectService.getProjectByPno(pno);
+    public ResponseEntity<ProjectResponse> getProject(@PathVariable Long pno) {
+        ProjectResponse response = projectService.getProjectByPno(pno);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -167,7 +169,11 @@ public class ProjectController {
             """
     )
     @GetMapping("/project-list/by-team-name")
-    public List<ProjectResponse> getProjectsByTeamName(@RequestParam("teamName") String teamName) {
-        return projectService.getProjectsByTeamName(teamName);
+    public ResponseEntity<List<ProjectResponse>> getProjectsByTeamName(
+            @RequestParam("teamName") String teamName) {
+
+        List<ProjectResponse> responseList = projectService.getProjectsByTeamName(teamName);
+
+        return ResponseEntity.ok(responseList);
     }
 }
