@@ -23,6 +23,7 @@ public class TodoService {
     private final TodoRepository todoRepository; // Repository 주입
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
 
     private void checkCreatorAuthorization(TodoEntity todo, UserEntity loginUser) throws IllegalAccessException {
         if (!todo.getCreatorId().getId().equals(loginUser.getId())) {
@@ -62,27 +63,25 @@ public class TodoService {
     }
 
     // 3. 프로젝트별 할 일 목록 조회
-    public List<TodoEntity> getTodosByProjectEntity(Long pno) {
-        return todoRepository.findByProjectEntity_pno(pno); // Repository에서 선언한 메소드 사용
-    }
-    /*
-    // 3. 프로젝트별 할 일 목록 조회 (필터링 및 인가 로직 가정 추가)
-    public List<TodoEntity> getTodosByProjectEntity(Integer pNo, UserEntity loginUser) {
-        // ⭐️ 1. 프로젝트 멤버십 확인 (ProjectService가 담당한다고 가정)
-        // projectService.checkMembership(pNo, loginUser.getId());
+    public List<TodoEntity> getTodosByProjectEntity(Long pNo, UserEntity loginUser) {
 
-        // ⭐️ 2. Todo 상태와 프로젝트 활성 상태를 기준으로 필터링
-        // Repository 메서드가 findByProjectEntity_pnoAndStateNotAndProjectEntity_IsActive(pno, "완료", true) 라고 가정
-        // return todoRepository.findByProjectEntity_pnoAndStateNotAndProjectEntity_IsActive(pNo, "완료", true);
+        // 1. ⭐️ 인가 로직: 사용자가 해당 프로젝트의 멤버인지 확인
+        projectService.validateUserInProject(pNo, loginUser.getId());
 
-        // 현재 Repository 메서드를 그대로 사용하며 필터링만 적용하는 임시 방안
-        List<TodoEntity> todos = todoRepository.findByProjectEntity_pno(pNo);
-        return todos.stream()
-                .filter(todo -> !"완료".equals(todo.getState()))
-                // .filter(todo -> todo.getProjectEntity().getIsActive()) // 프로젝트 활성 상태 필터링이 필요함
-                .toList();
+        // 2. ⭐️ 필터링 로직: Repository에서 직접 조건에 맞는 데이터만 조회
+        // 가정: Repository에 findByProjectEntity_pnoAndStateNotAndProjectEntity_IsActive 같은 메서드가 정의됨
+        // (완료 상태를 제외하고, 프로젝트가 활성화된 상태인 Todo만 조회)
+
+        try {
+            // 현재는 '완료' 상태만 제외하고 조회하는 것으로 가정 (주석 코멘트 반영)
+            return todoRepository.findByProjectEntity_pnoAndStateNot(pNo, "DONE");
+
+        } catch (Exception e) {
+            // 프로젝트가 존재하지 않거나(404) 등의 예외를 처리할 수 있음.
+            throw new RuntimeException("프로젝트 할 일 조회 중 오류 발생", e);
+        }
     }
-    */
+
     // 4. 할 일 상태 업데이트
     public TodoEntity updateTodoState(Long todoId, String newState,UserEntity loginUser) throws IllegalAccessException {
         TodoEntity todo = getTodoById(todoId);
