@@ -1,5 +1,6 @@
 package com.TeamAA.TeamDo.controller.Team;
 
+import com.TeamAA.TeamDo.dto.Team.TeamResponse;
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
 import com.TeamAA.TeamDo.service.Team.TeamService;
 import jakarta.servlet.http.HttpSession;
@@ -36,7 +37,7 @@ public class TeamViewController {
         }
 
         // 팀 생성
-        TeamEntity teamEntity = teamService.createTeam(name, userId);
+        TeamResponse teamEntity = teamService.createTeam(name, userId);
 
         // 팀 정보를 뷰에 전달
         model.addAttribute("team", teamEntity);

@@ -3,6 +3,7 @@ package com.TeamAA.TeamDo.controller;
 //이거 여기로 요청 넣으면 예시데이터 넣으려고 만드는 거에요
 
 import com.TeamAA.TeamDo.dto.Project.ProjectCreateRequest;
+import com.TeamAA.TeamDo.dto.Team.TeamResponse;
 import com.TeamAA.TeamDo.dto.User.SignupRequest;
 import com.TeamAA.TeamDo.dto.Todo.TodoCreateRequest;
 import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
@@ -52,7 +53,7 @@ public class InsertSampleController {
         }
         //2. 각자 팀을 1개씩 만들고, 각 팀에 새로 4명씩 가입. -> 5명이 한 팀. 팀은
         for (int i = 1; i <= teamCount; i++) {
-            TeamEntity teamEntity = teamService.createTeam("Team_" + i, "user_" + i);
+            TeamResponse teamEntity = teamService.createTeam("Team_" + i, "user_" + i);
             String inviteCode = teamEntity.getInviteCode();
             teamIdList.add(teamEntity.getId());
             for(int j = i+1; j < (i+5); j++) {
