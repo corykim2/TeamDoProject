@@ -7,6 +7,7 @@ import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
 import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
+import com.TeamAA.TeamDo.service.Project.ProjectService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
