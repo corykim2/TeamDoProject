@@ -7,12 +7,4 @@ public record TeamResponse(
         String name,
         String inviteCode,
         List<MemberResponse> participants
-) {
-    public String getInviteCode() {
-        return "";
-    }
-
-    public Long getId() {
-        return 0L;
-    }
-}
+) {}
