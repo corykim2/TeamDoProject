@@ -1,14 +1,13 @@
 package com.TeamAA.TeamDo.controller.exceptionhandler;
 
 import com.TeamAA.TeamDo.dto.User.ErrorResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class    GlobalAuthExceptionHandler {
+public class GlobalUserExceptionHandler {
 
     //아이디, 이메일 중복 처리
     @ExceptionHandler(DuplicateException.class)
