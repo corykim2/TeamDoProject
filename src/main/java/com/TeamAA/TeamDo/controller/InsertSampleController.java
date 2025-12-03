@@ -54,8 +54,8 @@ public class InsertSampleController {
         //2. 각자 팀을 1개씩 만들고, 각 팀에 새로 4명씩 가입. -> 5명이 한 팀. 팀은
         for (int i = 1; i <= teamCount; i++) {
             TeamResponse teamEntity = teamService.createTeam("Team_" + i, "user_" + i);
-            String inviteCode = teamEntity.getInviteCode();
-            teamIdList.add(teamEntity.getId());
+            String inviteCode = teamEntity.inviteCode(); // 변경
+            teamIdList.add(teamEntity.id());  ;
             for(int j = i+1; j < (i+5); j++) {
                 teamService.joinTeamByInviteCode("user_" + j, inviteCode);
             }
