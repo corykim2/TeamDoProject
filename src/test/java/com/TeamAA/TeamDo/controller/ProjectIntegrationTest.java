@@ -1,9 +1,12 @@
 package com.TeamAA.TeamDo.controller;
 
+import com.TeamAA.TeamDo.dto.Project.ProjectUpdateRequest;
 import com.TeamAA.TeamDo.entity.Project.ProjectEntity;
+import com.TeamAA.TeamDo.entity.Team.TeamParticipatingEntity;
 import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
 import com.TeamAA.TeamDo.repository.Team.TeamRepository;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
 
@@ -18,103 +21,196 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest // 1. 스프링 부트 서버를 실제로 띄우는 것과 같은 환경을 만듦
-@AutoConfigureMockMvc // 2. 가짜 브라우저(MockMvc)를 자동으로 설정
-@Transactional // 3. 테스트가 끝나면 DB에 넣었던 데이터를 모두 '롤백(삭제)'해서 깨끗하게 유지함
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
 class ProjectIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc; // 가짜 브라우저 역할
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper; // 자바 객체를 JSON으로 바꿔주는 도구
-
-    // 데이터를 미리 넣어야 하므로 리포지토리들도 불러옴
     @Autowired private UserRepository userRepository;
     @Autowired private TeamRepository teamRepository;
     @Autowired private ProjectRepository projectRepository;
+    @Autowired private TeamParticipatingRepository teamParticipatingRepository;
 
     @Test
-    @DisplayName("프로젝트 생성 성공 테스트")
-    void createProjectSuccess() throws Exception {
-        // [Given] 1. 사전 준비 (부모 데이터인 유저와 팀이 있어야 함)
-        // (UserEntity, TeamEntity 생성 방식은 본인 코드에 맞게 수정 필요)
-        UserEntity user = new UserEntity();
-        user.setId("user1");
-        user.setEmail("test@test.com");
-        user.setName("테스트유저");
-        user.setPassword("1234");
-        userRepository.save(user);
+    @DisplayName("1. [성공] 프로젝트 생성 테스트")
+    void createProject_Success() throws Exception {
+        // [Given]
+        UserEntity user = userRepository.save(createUser("user1", "테스트유저"));
+        TeamEntity team = teamRepository.save(createTeam("개발1팀"));
 
-        TeamEntity team = new TeamEntity();
-        team.setName("개발1팀");
-        // team.setInviteCode("INV123"); // 필요하면 추가
-        team = teamRepository.save(team);
-
-        // 생성할 프로젝트 요청 데이터 (DTO)
         ProjectCreateRequest request = new ProjectCreateRequest();
-        // DTO에 Setter가 없다면 리플렉션이나 생성자로 값을 넣어야 할 수도 있음.
-        // 여기서는 예시로 JSON 문자열을 직접 만들거나, DTO 필드가 public/setter가 있다고 가정
-        // (편의상 여기서는 ObjectMapper가 DTO의 필드에 값을 잘 넣는다고 가정)
+        request.setPname("새 프로젝트");
+        request.setTeamId(team.getId());
+        request.setUserId(user.getId());
 
-        // 실제로는 DTO에 값을 넣는 과정이 필요함 (Setter나 Builder 사용)
-        // request.setPname("새로운 프로젝트");
-        // request.setTeamId(team.getId());
-        // request.setManagerId(user.getId());
-
-        // DTO 대신 Map을 써서 JSON을 만들 수도 있습니다.
-        String jsonRequest = """
-                {
-                    "pname": "새로운 프로젝트",
-                    "teamId": %d,
-                    "userId": "%s"
-                }
-                """.formatted(team.getId(), user.getId());
-
-
-        // [When] 2. 실제 API 요청 보내기 (POST /api/project/registration)
+        // [When & Then]
         mockMvc.perform(post("/api/project/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonRequest)) // 위에서 만든 JSON 전송
-
-                // [Then] 3. 결과 검증
-                .andExpect(status().isOk()) // 200 OK가 왔는지?
-                .andExpect(jsonPath("$.pname").value("새로운 프로젝트")); // 응답의 pname이 맞는지?
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pname").value("새 프로젝트"))
+                .andExpect(jsonPath("$.teamName").value("개발1팀"));
     }
 
     @Test
-    @DisplayName("프로젝트 상세 조회 테스트")
-    void getProjectSuccess() throws Exception {
-        // [Given] 1. 데이터 미리 저장 (유저 -> 팀 -> 프로젝트)
+    @DisplayName("1-2. [예외] 존재하지 않는 팀으로 생성 시도")
+    void createProject_Fail_InvalidData() throws Exception {
+        // [Given] 유저는 있지만 팀은 없는 ID(9999) 사용
+        UserEntity user = userRepository.save(createUser("userFail", "실패자"));
+
+        ProjectCreateRequest request = new ProjectCreateRequest();
+        request.setPname("실패할 프로젝트");
+        request.setTeamId(9999L); // 없는 팀 ID
+        request.setUserId(user.getId());
+
+        // [When & Then] 400 Bad Request 기대
+        mockMvc.perform(post("/api/project/registration")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest()); // 예외 발생 확인
+    }
+
+    @Test
+    @DisplayName("2. [성공] 프로젝트 상세 조회 테스트")
+    void getProject_Success() throws Exception {
+        // [Given]
+        UserEntity user = userRepository.save(createUser("user2", "유저2"));
+        TeamEntity team = teamRepository.save(createTeam("기획팀"));
+        ProjectEntity project = projectRepository.save(createProject(user, team, "기존 프로젝트"));
+
+        // [When & Then] URL: /api/project/detail/by-pno/{pno}
+        mockMvc.perform(get("/api/project/detail/by-pno/" + project.getPno()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pname").value("기존 프로젝트"))
+                .andExpect(jsonPath("$.progressPercent").exists());
+    }
+
+    @Test
+    @DisplayName("2-2. [예외] 존재하지 않는 프로젝트 조회 시 실패")
+    void getProject_Fail_NotFound() throws Exception {
+        // [When] 없는 ID(9999)로 조회
+        mockMvc.perform(get("/api/project/detail/by-pno/9999"))
+                // [Then] 400 Bad Request 기대 (GlobalExceptionHandler가 처리)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists()); // 에러 메시지가 있는지 확인
+    }
+
+    @Test
+    @DisplayName("3. [성공] 프로젝트 수정 테스트 (권한 있음)")
+    void updateProject_Success() throws Exception {
+        // [Given]
+        UserEntity user = userRepository.save(createUser("user3", "팀장"));
+        TeamEntity team = teamRepository.save(createTeam("디자인팀"));
+
+        // ★ 팀원 등록 (권한 부여)
+        addMemberToTeam(user, team);
+
+        ProjectEntity project = projectRepository.save(createProject(user, team, "수정 전 이름"));
+
+        ProjectUpdateRequest updateRequest = new ProjectUpdateRequest();
+        updateRequest.setPname("수정 후 이름");
+        updateRequest.setTeamId(team.getId());
+
+        // [When] URL: /api/project/modification/by-pno/{pno}?userId=...
+        mockMvc.perform(put("/api/project/modification/by-pno/" + project.getPno())
+                        .param("userId", user.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                // [Then]
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pname").value("수정 후 이름"));
+    }
+
+    @Test
+    @DisplayName("3-2. [예외] 프로젝트 수정 실패 (권한 없음 - 팀원 아님)")
+    void updateProject_Fail_NoPermission() throws Exception {
+        // [Given]
+        UserEntity owner = userRepository.save(createUser("owner", "원래주인"));
+        UserEntity hacker = userRepository.save(createUser("hacker", "해커")); // 팀에 안 들어감
+        TeamEntity team = teamRepository.save(createTeam("보안팀"));
+
+        addMemberToTeam(owner, team); // 주인만 팀원 등록
+        ProjectEntity project = projectRepository.save(createProject(owner, team, "중요 프로젝트"));
+
+        ProjectUpdateRequest updateRequest = new ProjectUpdateRequest();
+        updateRequest.setPname("해킹된 이름");
+        updateRequest.setTeamId(team.getId());
+
+        // [When] 해커가 수정 시도
+        mockMvc.perform(put("/api/project/modification/by-pno/" + project.getPno())
+                        .param("userId", hacker.getId()) // 해커 아이디로 요청
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                // [Then] 400 Bad Request (접근 권한 없음 예외)
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("4. [성공] 프로젝트 삭제 테스트")
+    void deleteProject_Success() throws Exception {
+        // [Given]
+        UserEntity user = userRepository.save(createUser("user4", "삭제자"));
+        TeamEntity team = teamRepository.save(createTeam("삭제팀"));
+        addMemberToTeam(user, team); // 권한 부여
+        ProjectEntity project = projectRepository.save(createProject(user, team, "삭제될 프로젝트"));
+
+        // [When] URL: /api/project/removal/by-pno/{pno}?userId=...
+        mockMvc.perform(delete("/api/project/removal/by-pno/" + project.getPno())
+                        .param("userId", user.getId()))
+                // [Then]
+                .andExpect(status().isOk());
+    }
+    @Test
+    @DisplayName("4-2. [예외] 프로젝트 삭제 실패 (권한 없음)")
+    void deleteProject_Fail_NoPermission() throws Exception {
+        // [Given]
+        UserEntity owner = userRepository.save(createUser("owner2", "주인2"));
+        UserEntity hacker = userRepository.save(createUser("hacker2", "해커2")); // 팀원 아님
+        TeamEntity team = teamRepository.save(createTeam("보안팀2"));
+        addMemberToTeam(owner, team);
+        ProjectEntity project = projectRepository.save(createProject(owner, team, "삭제X"));
+
+        // [When & Then] 해커 ID로 삭제 시도 -> 400 Bad Request
+        mockMvc.perform(delete("/api/project/removal/by-pno/" + project.getPno())
+                        .param("userId", hacker.getId()))
+                .andExpect(status().isBadRequest());
+    }
+
+    // --- Helper Methods (데이터 생성 도우미) ---
+    private UserEntity createUser(String id, String name) {
         UserEntity user = new UserEntity();
-        user.setId("user2");
-        user.setEmail("test2@test.com");
+        user.setId(id);
+        user.setEmail(id + "@test.com");
+        user.setName(name);
         user.setPassword("1234");
-        user.setName("유저2");
-        user = userRepository.save(user);
+        return user;
+    }
 
+    private TeamEntity createTeam(String name) {
         TeamEntity team = new TeamEntity();
-        team.setName("기획팀");
-        teamRepository.save(team);
+        team.setName(name);
+        return team;
+    }
 
-        ProjectEntity project = ProjectEntity.builder()
-                .pname("기존 프로젝트")
+    private ProjectEntity createProject(UserEntity user, TeamEntity team, String pname) {
+        return ProjectEntity.builder()
+                .pname(pname)
                 .userEntity(user)
                 .teamEntity(team)
                 .build();
-        projectRepository.save(project); // DB에 저장됨 (pno 자동 생성)
+    }
 
-        // [When] 2. 조회 API 호출 (GET /api/project/detail/by-pno/{pno})
-        mockMvc.perform(get("/api/project/detail/by-pno/" + project.getPno()))
-
-                // [Then] 3. 검증
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pname").value("기존 프로젝트"))
-                .andExpect(jsonPath("$.teamName").value("기획팀"));
+    private void addMemberToTeam(UserEntity user, TeamEntity team) {
+        TeamParticipatingEntity participating = new TeamParticipatingEntity();
+        participating.setUserEntity(user);
+        participating.setTeamEntity(team);
+        teamParticipatingRepository.save(participating);
     }
 }
