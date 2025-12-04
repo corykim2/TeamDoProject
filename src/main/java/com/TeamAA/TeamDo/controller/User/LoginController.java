@@ -54,17 +54,25 @@ public class LoginController {
                             schema = @Schema(implementation = LoginResponse.class),
                             examples = @ExampleObject(value = "{\"message\":\"로그인 성공\"}")
                     )),
-            @ApiResponse(responseCode = "400", description = "사용자 공백입력, 사용자 데이터 누락, user엔티티에 저장가능한 데이터 사이즈 초과",
+            @ApiResponse(responseCode = "400", description = "user엔티티에 저장가능한 데이터 사이즈 초과, 사용자 공백입력, 사용자 데이터 누락\"",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":400,\"message\":\"올바른 아이디, 비밀번호를 입력해주세요.\"}")
+                            examples = {
+                                    @ExampleObject(name = "아이디 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 아이디를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "비밀번호 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 비밀번호를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "아이디 공백",value = "{\"status\":400,\"message\":\"아이디를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "비밀번호 공백",value = "{\"status\":400,\"message\":\"비밀번호를 입력해주세요.\"}")
+                            }
                     )),
             @ApiResponse(responseCode = "401", description = "DB에 저장된 아이디 또는 비밀번호와 사용자에게 받은 아이디 또는 비밀번호와 불일치",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"정확한 아이디와 비밀번호를 입력해주세요.\"}")
+                            examples = {
+                                    @ExampleObject(name = "아이디 불일치",value = "{\"status\":401,\"message\":\"아이디 또는 비밀번호가 잘못 되었습니다.\"}"),
+                                    @ExampleObject(name = "비밀번호 불일치",value = "{\"status\":401,\"message\":\"아이디 또는 비밀번호가 잘못 되었습니다.\"}")
+                            }
                     )),
             @ApiResponse(responseCode = "403", description = "탈퇴한 사용자, DB에서 withDrawn= true인 유저는 로그인이 불가능",
                     content = @Content(

@@ -59,7 +59,17 @@ public class SignupController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":400,\"message\":\"올바른 정보를 입력해주세요\"}")
+                            examples = {
+                                    @ExampleObject(name = "아이디 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 아이디를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "이메일 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 이메일을 입력해주세요.\"}"),
+                                    @ExampleObject(name = "비밀번호 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 비밀번호를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "이름 데이터 사이즈 초과",value = "{\"status\":400,\"message\":\"올바른 이름을 입력해주세요.\"}"),
+                                    @ExampleObject(name = "아이디 공백",value = "{\"status\":400,\"message\":\"아이디를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "이메일 공백",value = "{\"status\":400,\"message\":\"이메일을 입력해주세요.\"}"),
+                                    @ExampleObject(name = "비밀번호 공백",value = "{\"status\":400,\"message\":\"비밀번호를 입력해주세요.\"}"),
+                                    @ExampleObject(name = "이름 공백",value = "{\"status\":400,\"message\":\"이름을 입력해주세요.\"}")
+
+                            }
                     )),
             @ApiResponse(responseCode = "403", description = "탈퇴한 사용자, DB에서 withDrawn= true인 유저는 회원가입이 불가능",
                     content = @Content(

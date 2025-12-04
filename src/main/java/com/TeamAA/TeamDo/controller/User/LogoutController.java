@@ -55,7 +55,7 @@ public class LogoutController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"세션이 만료되었습니다.\"}")
+                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"로그인 세션이 유효하지 않습니다.\"}")
                     )),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류",
                     content = @Content(
@@ -66,17 +66,8 @@ public class LogoutController {
     })
     @DeleteMapping("")
     public ResponseEntity<?> logout(HttpSession session) {
-        try {
-            String userId = (String) session.getAttribute("userId");
-            if (userId == null) {
-                return ResponseEntity.status(401)
-                        .body(new ErrorResponse(401, "세션이 만료되었습니다."));
-            }
-            session.invalidate();
-            return ResponseEntity.ok(new LogoutResponse("로그아웃 완료"));
-        } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new ErrorResponse(500, "로그아웃 처리 중 문제가 발생하였습니다."));
-        }
+        String userId = sessionService.getUserId(session);
+        session.invalidate();
+        return ResponseEntity.ok(new LogoutResponse("로그아웃 완료"));
     }
 }

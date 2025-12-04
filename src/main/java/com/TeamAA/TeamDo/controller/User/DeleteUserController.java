@@ -65,11 +65,20 @@ public class DeleteUserController {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(value = "{\"status\":400,\"message\":\"비밀번호를 입력해주세요\"}")
                     )),
-            @ApiResponse(responseCode = "401", description = "사용자가 입력한 비밀번호와 DB에 저장된 사용자의 비밀번호와 불일치",
+            @ApiResponse(responseCode = "401", description = "인증 실패(세션 없음/세션 만료/비밀번호 불일치)",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"비밀번호가 일치하지않습니다.\"}")
+                            examples = {
+                                    @ExampleObject(
+                                            name = "SESSION_INVALID",
+                                            value = "{\"status\":401,\"message\":\"로그인 세션이 유효하지 않습니다.\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "PASSWORD_MISMATCH",
+                                            value = "{\"status\":401,\"message\":\"비밀번호가 일치하지 않습니다.\"}"
+                                    )
+                            }
                     )),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류, 예기지못한 오류 발생시 예외처리",
                     content = @Content(
