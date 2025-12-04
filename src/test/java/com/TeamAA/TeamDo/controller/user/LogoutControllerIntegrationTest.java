@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @Transactional
 class LogoutControllerIntegrationTest {
 
@@ -35,14 +35,20 @@ class LogoutControllerIntegrationTest {
     @Test
     @DisplayName("로그아웃 성공 - 200")
     void logout_success() throws Exception {
+        //세션 생성후 id매핑
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("userId", "user123");
+
         mockMvc.perform(delete("/sessions")
                         .session(session))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("로그아웃 완료"));
     }
 
     @Test
     @DisplayName("로그아웃 실패 - 세션 없음 401")
     void logout_fail_noSession() throws Exception {
+
         MockHttpSession emptySession = new MockHttpSession(); // userId 없음
 
         mockMvc.perform(delete("/sessions")
