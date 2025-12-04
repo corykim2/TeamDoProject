@@ -2,8 +2,10 @@ package com.TeamAA.TeamDo.dto.Project;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class ProjectUpdateRequest {
     private String pname;  // 변경할 프로젝트 이름
