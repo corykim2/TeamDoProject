@@ -33,6 +33,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -226,6 +227,146 @@ public class TodoControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         assertTrue(todoRepository.findById(todo.getTodoId()).isEmpty());
+    }
+    // 1-2. 할 일 생성 실패: 필수값 누락 (400 Bad Request)
+    // (이미 작성하신 createTodo_MissingFields가 있지만, 시나리오 완성을 위해 포함합니다)
+    @Test
+    @DisplayName("1-2. 할 일 생성 실패: 필수값 누락")
+    void createTodo_Failure_MissingFields() throws Exception {
+        TodoCreateRequest request = new TodoCreateRequest();
+        // 필수 값 누락 상태
+
+        mockMvc.perform(post("/api/todos/registration")
+                        .requestAttr("loginUser", creator)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+        // GlobalExceptionHandler 설정에 따라 .andExpect(jsonPath("$.name").exists()) 등을 추가할 수 있음
+    }
+
+    // 2-2. 특정 할 일 조회 실패: 존재하지 않는 ID (404 Not Found)
+    @Test
+    @DisplayName("2-2. 특정 할 일 조회 실패: 존재하지 않는 ID")
+    void getTodo_Failure_NotFound() throws Exception {
+        Long nonExistentId = 99999L;
+
+        mockMvc.perform(get("/api/todos/details/by-todoId/{todoId}", nonExistentId)
+                        .requestAttr("loginUser", creator))
+                .andDo(print())
+                .andExpect(status().isNotFound()); // 404 확인
+    }
+
+    // 3-2. 프로젝트별 조회 실패: 존재하지 않는 프로젝트 (404 Not Found)
+    @Test
+    @DisplayName("3-2. 프로젝트별 조회 실패: 존재하지 않는 프로젝트")
+    void getTodosByProject_Failure_NotFound() throws Exception {
+        Long nonExistentPno = 99999L;
+
+        // Mock 설정: 존재하지 않는 프로젝트 ID로 검증 시 예외 발생 유도
+        // (Service 로직에서 validateUserInProject가 호출될 때 예외를 던지도록 설정)
+        doThrow(new jakarta.persistence.EntityNotFoundException("프로젝트를 찾을 수 없습니다."))
+                .when(projectService).validateUserInProject(anyLong(), anyString());
+
+        mockMvc.perform(get("/api/todos-list/by-project/{pNo}", nonExistentPno)
+                        .requestAttr("loginUser", creator))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // 4-2. 할 일 수정 실패: 존재하지 않는 ID (404 Not Found)
+    @Test
+    @DisplayName("4-2. 할 일 수정 실패: 존재하지 않는 ID")
+    void updateTodo_Failure_NotFound() throws Exception {
+        Long nonExistentId = 99999L;
+        TodoUpdateRequest updateReq = new TodoUpdateRequest();
+        updateReq.setName("수정 시도");
+
+        mockMvc.perform(patch("/api/todos/modification/by-todoId/{todoId}", nonExistentId)
+                        .requestAttr("loginUser", creator)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateReq)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // 4-3. 할 일 수정 실패: 권한 없음 (403 Forbidden)
+    // 생성자가 아닌 사람(Manager)이 수정을 시도할 경우
+    @Test
+    @DisplayName("4-3. 할 일 수정 실패: 권한 없음 (생성자가 아님)")
+    void updateTodo_Failure_Forbidden() throws Exception {
+        TodoEntity todo = createTodoEntity("권한 테스트", 1);
+        TodoUpdateRequest updateReq = new TodoUpdateRequest();
+        updateReq.setName("불법 수정 시도");
+
+        // creator가 만든 todo를 manager가 수정하려고 시도
+        mockMvc.perform(patch("/api/todos/modification/by-todoId/{todoId}", todo.getTodoId())
+                        .requestAttr("loginUser", manager) // ⭐️ 다른 유저 주입
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateReq)))
+                .andDo(print())
+                .andExpect(status().isForbidden()); // 403 확인
+    }
+
+    // 5-2. 상태 업데이트 실패: 존재하지 않는 ID (404 Not Found)
+    @Test
+    @DisplayName("5-2. 상태 업데이트 실패: 존재하지 않는 ID")
+    void updateTodoState_Failure_NotFound() throws Exception {
+        Long nonExistentId = 99999L;
+        TodoStateUpdateRequest stateReq = new TodoStateUpdateRequest();
+        stateReq.setState("DONE");
+
+        mockMvc.perform(put("/api/todos/modification-state/by-todoId/{todoId}/state", nonExistentId)
+                        .requestAttr("loginUser", manager)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(stateReq)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // 5-3. 상태 업데이트 실패: 권한 없음 (403 Forbidden)
+    // 담당자가 아닌 사람(Creator)이 상태 변경을 시도할 경우
+    @Test
+    @DisplayName("5-3. 상태 업데이트 실패: 권한 없음 (담당자가 아님)")
+    void updateTodoState_Failure_Forbidden() throws Exception {
+        TodoEntity todo = createTodoEntity("상태 권한 테스트", 1);
+        TodoStateUpdateRequest stateReq = new TodoStateUpdateRequest();
+        stateReq.setState("DONE");
+
+        // manager가 담당자인 todo를 creator가 상태 변경하려고 시도
+        mockMvc.perform(put("/api/todos/modification-state/by-todoId/{todoId}/state", todo.getTodoId())
+                        .requestAttr("loginUser", creator) // ⭐️ 담당자가 아닌 유저 주입
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(stateReq)))
+                .andDo(print())
+                .andExpect(status().isForbidden()); // 403 확인
+    }
+
+    // 6-2. 할 일 삭제 실패: 존재하지 않는 ID (404 Not Found)
+    @Test
+    @DisplayName("6-2. 할 일 삭제 실패: 존재하지 않는 ID")
+    void deleteTodo_Failure_NotFound() throws Exception {
+        Long nonExistentId = 99999L;
+
+        mockMvc.perform(delete("/api/todos/removal/by-todoId/{todoId}", nonExistentId)
+                        .requestAttr("loginUser", creator))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // 6-3. 할 일 삭제 실패: 권한 없음 (403 Forbidden)
+    // 생성자가 아닌 사람(Manager)이 삭제를 시도할 경우
+    @Test
+    @DisplayName("6-3. 할 일 삭제 실패: 권한 없음 (생성자가 아님)")
+    void deleteTodo_Failure_Forbidden() throws Exception {
+        TodoEntity todo = createTodoEntity("삭제 권한 테스트", 1);
+
+        // creator가 만든 todo를 manager가 삭제하려고 시도
+        mockMvc.perform(delete("/api/todos/removal/by-todoId/{todoId}", todo.getTodoId())
+                        .requestAttr("loginUser", manager) // ⭐️ 다른 유저 주입
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isForbidden()); // 403 확인
     }
 
     // Helper Method
