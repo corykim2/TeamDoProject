@@ -58,7 +58,7 @@ class LoginControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 아이디 없음 (401)")
+    @DisplayName("로그인 실패 - 존재하지않는 아이디 (401)")
     void login_fail_idNotFound() throws Exception {
 
         LoginRequest request = new LoginRequest();
@@ -123,16 +123,60 @@ class LoginControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 요청값 검증 실패 (400)")
-    void login_fail_validation() throws Exception {
+    @DisplayName("로그인 실패 - 요청값 검증 실패 - 아이디 공백입력 (400)")
+    void login_fail_blank_id() throws Exception {
 
         LoginRequest request = new LoginRequest();
-        request.setId("");
-        request.setPassword("");
+        request.setId(""); //공백입력 체크
+        request.setPassword("password123");
 
         mockMvc.perform(post("/sessions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 요청값 검증 실패 - 비밀번호 공백입력 (400)")
+    void login_fail_blank_pass() throws Exception {
+
+        LoginRequest request = new LoginRequest();
+        request.setId("tset1234");
+        request.setPassword(""); //비밀번호 공백입력
+
+        mockMvc.perform(post("/sessions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 요청값 검증 실패 - 아이디 사이즈초과 (400)")
+    void login_fail_size_id() throws Exception {
+
+        LoginRequest request = new LoginRequest();
+        request.setId("tset1234tset1234tset1234tset1234tset1234tset1234tset1234tset1234tset1234"); //비정상적인 아이디길이 기입
+        request.setPassword("password1234"); //비밀번호 공백입력
+
+        mockMvc.perform(post("/sessions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("올바른 아이디를 입력해주세요."));
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 요청값 검증 실패 - 비밀번호 사이즈초과 (400)")
+    void login_fail_size_pass() throws Exception {
+
+        LoginRequest request = new LoginRequest();
+        request.setId("tset123");
+        request.setPassword("password1234passworord1234password1234password1234password1234"); //비정상적인 비밀번호 입력
+
+        mockMvc.perform(post("/sessions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("올바른 비밀번호를 입력해주세요."));
     }
 }

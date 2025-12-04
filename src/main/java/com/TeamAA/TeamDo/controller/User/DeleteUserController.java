@@ -78,7 +78,7 @@ public class DeleteUserController {
                             examples = @ExampleObject(value = "{\"status\":500,\"message\":\"회원탈퇴 처리 중 문제가 발생했습니다.\"}")
                     ))
     })
-    @DeleteMapping("/me")
+    @DeleteMapping("")
     public ResponseEntity<DeleteUserResponse> deleteUser(@Valid @RequestBody DeleteUserRequest request, HttpSession session) {
         String userId = sessionService.getUserId(session); //세션검증
         UserEntity user = deleteUserService.deleteUser(userId, request);

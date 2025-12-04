@@ -3,7 +3,6 @@ package com.TeamAA.TeamDo.controller.user;
 import com.TeamAA.TeamDo.dto.User.DeleteUserRequest;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
-import com.TeamAA.TeamDo.service.User.SessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@TestExecutionListeners(value = {
-}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @Transactional
 public class DeleteUserControllerIntegrationTest {
 
@@ -52,12 +48,12 @@ public class DeleteUserControllerIntegrationTest {
         DeleteUserRequest request = new DeleteUserRequest();
         request.setPassword("password123");
 
-        mockMvc.perform(delete("/users/me")
+        mockMvc.perform(delete("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .session(session))
-                .andExpect(status().isInternalServerError())
-                ;
+                        .sessionAttr("userId", "user123"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("회원 탈퇴가 완료되었습니다."));
     }
 
     @Test
@@ -72,12 +68,12 @@ public class DeleteUserControllerIntegrationTest {
         DeleteUserRequest request = new DeleteUserRequest();
         request.setPassword("wrongPassword");
 
-        mockMvc.perform(delete("/users/me")
+        mockMvc.perform(delete("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .session(session))
-                .andExpect(status().isInternalServerError())
-        ;
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("비밀번호가 일치하지 않습니다, 올바른 비밀번호를 입력해주세요."));
     }
 
     @Test
@@ -87,7 +83,7 @@ public class DeleteUserControllerIntegrationTest {
         request.setPassword("password123");
 
         // 세션에 userId 없음
-        mockMvc.perform(delete("/users/me")
+        mockMvc.perform(delete("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .session(new MockHttpSession()))
@@ -104,10 +100,12 @@ public class DeleteUserControllerIntegrationTest {
         DeleteUserRequest request = new DeleteUserRequest();
         request.setPassword(""); // 공백
 
-        mockMvc.perform(delete("/users/me")
+        mockMvc.perform(delete("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .session(session))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."));
+
     }
 }

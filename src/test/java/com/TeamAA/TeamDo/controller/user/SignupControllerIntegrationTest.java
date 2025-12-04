@@ -34,9 +34,6 @@ class SignupControllerIntegrationTest {
         userRepository.deleteAll();
     }
 
-    // ------------------------------
-    // 1. 정상 회원가입 테스트
-    // ------------------------------
     @Test
     @DisplayName("회원가입 성공 - 200")
     void signupSuccess() throws Exception {
@@ -55,9 +52,6 @@ class SignupControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("회원가입 성공"));
     }
 
-    // ------------------------------
-    // 2. 아이디 중복 테스트
-    // ------------------------------
     @Test
     @DisplayName("아이디 중복 - 409")
     void signupFail_duplicateId() throws Exception {
@@ -79,9 +73,6 @@ class SignupControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("이미 존재하는 아이디입니다."));
     }
 
-    // ------------------------------
-    // 3. 이메일 중복 테스트
-    // ------------------------------
     @Test
     @DisplayName("이메일 중복 - 409")
     void signupFail_duplicateEmail() throws Exception {
@@ -103,9 +94,6 @@ class SignupControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("이미 존재하는 이메일입니다."));
     }
 
-    // ------------------------------
-    // 4. 탈퇴한 사용자 재가입 테스트
-    // ------------------------------
     @Test
     @DisplayName("탈퇴한 사용자 재가입 시도 - 403")
     void signupFail_withdrawnUser() throws Exception {
@@ -127,22 +115,75 @@ class SignupControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("탈퇴한 사용자 입니다. 탈퇴한 사용자는 재가입이 불가능합니다."));
     }
 
-    // ------------------------------
-    // 5. 요청 데이터 검증 실패 테스트 (400)
-    // ------------------------------
     @Test
-    @DisplayName("누락 데이터 → 400 Bad Request")
-    void signupFail_validationError() throws Exception {
+    @DisplayName("아이디 누락 - 400 Bad Request")
+    void signupFail_blank_id() throws Exception {
 
         SignupRequest request = new SignupRequest();
-        request.setId("");   // invalid
-        request.setEmail(""); // invalid
-        request.setPassword(""); // invalid
-        request.setName(""); // invalid
+        request.setId("");
+        request.setEmail("test@exam.com");
+        request.setPassword("password1234");
+        request.setName("testuser");
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                //.andExpect(jsonPath("$.message").value("아이디를 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("이메일 누락 → 400 Bad Request")
+    void signupFail_blank_email() throws Exception {
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("");
+        request.setPassword("password1234");
+        request.setName("testuser");
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(jsonPath("$.message").value("이메일을 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("비밀번호 누락 → 400 Bad Request")
+    void signupFail_blank_password() throws Exception {
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("test@exam.com");
+        request.setPassword(""); //비밀번호 누락
+        request.setName("testuser");
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("이름 누락 → 400 Bad Request")
+    void signupFail_blank_name() throws Exception {
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("test@exam.com");
+        request.setPassword("password1234");
+        request.setName(""); //이름 누락
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                //.andExpect(jsonPath("$.message").value("이름을 입력해주세요."))
+        ;
     }
 }
