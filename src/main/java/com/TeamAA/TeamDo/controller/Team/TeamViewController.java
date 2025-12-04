@@ -1,4 +1,4 @@
-package Team;
+package com.TeamAA.TeamDo.controller.Team;
 
 import com.TeamAA.TeamDo.dto.Team.TeamResponse;
 import com.TeamAA.TeamDo.entity.Team.TeamEntity;
