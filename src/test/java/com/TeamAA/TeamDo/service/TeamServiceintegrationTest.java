@@ -1,4 +1,3 @@
-// src/test/java/com/TeamAA/TeamDo/service/TeamServiceIntegrationTest.java
 package com.TeamAA.TeamDo.service;
 
 import com.TeamAA.TeamDo.dto.Team.TeamResponse;
@@ -43,6 +42,10 @@ public class TeamServiceintegrationTest {
         userRepository.save(leader);
         userRepository.save(member);
     }
+
+    // -----------------------------
+    // 정상 기능 테스트
+    // -----------------------------
 
     @Test
     void 팀_생성_및_조회() {
@@ -92,11 +95,9 @@ public class TeamServiceintegrationTest {
 
     @Test
     void 내_팀_목록_조회() {
-        // 팀 여러 개 생성
         TeamResponse team1 = teamService.createTeam("TeamA", leader.getId());
         TeamResponse team2 = teamService.createTeam("TeamB", leader.getId());
 
-        // 멤버를 TeamA에만 참가시킴
         teamService.joinTeamByInviteCode(member.getId(), team1.inviteCode());
 
         List<TeamResponse> leaderTeams = teamService.getMyTeams(leader.getId());
@@ -105,5 +106,72 @@ public class TeamServiceintegrationTest {
         List<TeamResponse> memberTeams = teamService.getMyTeams(member.getId());
         assertEquals(1, memberTeams.size());
         assertEquals(team1.id(), memberTeams.get(0).id());
+    }
+
+    // -----------------------------
+    // 예외 테스트
+    // -----------------------------
+
+    @Test
+    void 존재하지_않는_유저로_팀_생성시_예외() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.createTeam("NoUserTeam", "invalidUser"));
+
+        assertEquals("유저를 찾을 수 없습니다.", ex.getMessage());
+    }
+
+    @Test
+    void 존재하지_않는_초대코드로_팀_참가시_예외() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.joinTeamByInviteCode(member.getId(), "INVALID"));
+
+        assertEquals("유효하지 않은 초대코드입니다.", ex.getMessage());
+    }
+
+    @Test
+    void 이미_참가한_팀에_재참가하면_예외() {
+        TeamResponse team = teamService.createTeam("TestTeam", leader.getId());
+        teamService.joinTeamByInviteCode(member.getId(), team.inviteCode());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.joinTeamByInviteCode(member.getId(), team.inviteCode()));
+
+        assertEquals("이미 팀에 참여중입니다.", ex.getMessage());
+    }
+
+    @Test
+    void 존재하지_않는_팀_상세조회시_예외() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.getTeamDetailDto(999L));
+
+        assertEquals("팀을 찾을 수 없습니다.", ex.getMessage());
+    }
+
+    @Test
+    void 팀장이_팀을_나가려하면_예외() {
+        TeamResponse team = teamService.createTeam("LeaveErrorTeam", leader.getId());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.leaveTeam(leader.getId(), team.id()));
+
+        assertEquals("팀장은 팀을 나갈 수 없습니다.", ex.getMessage());
+    }
+
+    @Test
+    void 팀에_없는_유저가_나가려하면_예외() {
+        TeamResponse team = teamService.createTeam("LeaveTeam", leader.getId());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.leaveTeam(member.getId(), team.id()));
+
+        assertEquals("팀 참여 정보를 찾을 수 없습니다.", ex.getMessage());
+    }
+
+    @Test
+    void 존재하지_않는_팀의_초대코드_재발급시_예외() {
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> teamService.regenerateInviteCode(999L));
+
+        assertEquals("팀을 찾을 수 없습니다.", ex.getMessage());
     }
 }
