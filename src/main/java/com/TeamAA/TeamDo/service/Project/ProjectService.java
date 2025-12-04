@@ -114,22 +114,29 @@ public class ProjectService {
         return (int) Math.round(((double) completedCount / todos.size()) * 100);
     }
 
+    //todo용 참여검증
+
+    public boolean isProjectMember(Long projectId, String userId) {
+        ProjectEntity project = projectRepository.findById(projectId).orElse(null);
+
+        // 프로젝트가 없거나, 멤버가 아니면 false
+        if (project == null) {
+            return false;
+        }
+
+        Long teamId = project.getTeamEntity().getId();
+        return teamParticipatingRepository.existsByTeamEntity_IdAndUserEntity_Id(teamId, userId);
+    }
+
+    //프로젝트용 참여 검증
     public void validateUserInProject(Long projectId, String userId) {
 
-        // 1. 프로젝트 정보 가져오기 (어떤 팀인지 알아야 하니까)
-        ProjectEntity project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 프로젝트입니다."));
-
-        // 2. 프로젝트가 속한 팀의 ID 추출
-        Long teamId = project.getTeamEntity().getId();
-
-        // 3. 해당 팀에 유저가 참여 중인지 확인 (Repository 호출)
-        boolean isMember = teamParticipatingRepository.existsByTeamEntity_IdAndUserEntity_Id(teamId, userId);
-
-        // 4. 참여자가 아니라면 에러 발생 (권한 없음)
-        if (!isMember) {
-            throw new IllegalArgumentException("해당 프로젝트에 접근 권한이 없습니다. (팀 멤버가 아님)");
-            // 나중에 security 적용시 AccessDeniedException 등을 사용하면 좋음
+        // 위에서 만든 함수를 호출해서 확인
+        if (!isProjectMember(projectId, userId)) {
+            // 권한이 없으면 내 컨트롤러가 처리할 예외를 던짐
+            throw new IllegalArgumentException("해당 프로젝트에 대한 접근 권한이 없습니다.");
         }
     }
+
+
 }
