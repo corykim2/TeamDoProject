@@ -124,6 +124,90 @@ class SignupControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("아이디 사이즈 초과 - 400 Bad Request")
+    void signupFail_size_id() throws Exception {
+        //given 없이 진행
+
+        SignupRequest request = new SignupRequest();
+        request.setId("aasdofkjasdkfjasdkfjasodkfjaasdofkjasodfjaasdofkjasdkfjasdkfjasodkfjaasdofkjasodfj");
+        request.setEmail("test@exam.com");
+        request.setPassword("password1234");
+        request.setName("testuser");
+        //when
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+        //.andExpect(jsonPath("$.message").value("아이디를 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("이메일 사이즈 초과 → 400 Bad Request")
+    void signupFail_size_email() throws Exception {
+        //given 없이 진행
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("aasdofkjasdkfjasdkfjasodkfjaasdofkjasodfj@exam.com");
+        request.setPassword("password1234");
+        request.setName("testuser");
+        //when
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+        //.andExpect(jsonPath("$.message").value("이메일을 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("비밀번호 사이즈 초과 → 400 Bad Request")
+    void signupFail_size_password() throws Exception {
+        //given 없이 진행
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("test@exam.com");
+        request.setPassword("password1234password1234password1234password1234password1234password1234passwo"); //비밀번호 사이즈 초과
+        request.setName("testuser");
+        //when
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+        //.andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."))
+        ;
+    }
+
+    @Test
+    @DisplayName("이름 사이즈 초과 → 400 Bad Request")
+    void signupFail_size_name() throws Exception {
+        //given 없이 진행
+
+        SignupRequest request = new SignupRequest();
+        request.setId("test1234");
+        request.setEmail("test@exam.com");
+        request.setPassword("password1234");
+        request.setName("aasdofkjasdkfjasdkfjasodkfjaasdofkjasodfjaasdofkjasdkfjasdkfjasodkfjaasdofkjasodfj"); //이름 누락
+        //when
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+        //.andExpect(jsonPath("$.message").value("이름을 입력해주세요."))
+        ;
+    }
+
+    @Test
     @DisplayName("아이디 누락 - 400 Bad Request")
     void signupFail_blank_id() throws Exception {
         //given 없이 진행

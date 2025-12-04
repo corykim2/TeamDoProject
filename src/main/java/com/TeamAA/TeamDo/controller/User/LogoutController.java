@@ -55,7 +55,7 @@ public class LogoutController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"세션이 만료되었습니다.\"}")
+                            examples = @ExampleObject(value = "{\"status\":401,\"message\":\"로그인 세션이 유효하지 않습니다.\"}")
                     )),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류",
                     content = @Content(
