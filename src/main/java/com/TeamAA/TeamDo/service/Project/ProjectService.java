@@ -50,7 +50,7 @@ public class ProjectService {
 
 
     //ID로 프로젝트 조회
-
+    @Transactional(readOnly = true)
     public ProjectResponse getProjectByPno(Long pno) {
         ProjectEntity project = projectRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid project PNO: " + pno));
