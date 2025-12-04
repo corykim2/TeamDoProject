@@ -102,7 +102,7 @@ public class TodoRepositoryTest {
 
         // When
         // Project 100에서 '완료' 상태가 아닌 것만 조회 (기대값: 미완, 보류 => 2개)
-        List<TodoEntity> activeTodosAlpha = todoRepository.findByProjectEntity_pnoAndStateNot(100, "완료");
+        List<TodoEntity> activeTodosAlpha = todoRepository.findByProjectEntity_pnoAndStateNot(100L, "완료");
 
         // Then
         assertEquals(2, activeTodosAlpha.size());

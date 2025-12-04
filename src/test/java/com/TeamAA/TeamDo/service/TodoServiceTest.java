@@ -7,6 +7,7 @@ import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Project.ProjectRepository;
 import com.TeamAA.TeamDo.repository.Todo.TodoRepository;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
+import com.TeamAA.TeamDo.service.Todo.TodoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -209,7 +210,7 @@ public class TodoServiceTest {
         // 현재는 편의상 pNo만 받도록 테스트합니다.
 
         // When
-        List<TodoEntity> result = todoService.getTodosByProjectEntity(1L);
+        List<TodoEntity> result = todoService.getTodosByProjectEntity(100L,managerUser);
 
         // Then
         // 결과 목록에 '완료' 상태의 Todo가 포함되지 않아야 합니다.
