@@ -22,6 +22,12 @@ public class GlobalUserExceptionHandler {
         ErrorResponse error = new ErrorResponse(401,e.getMessage());
         return ResponseEntity.status(401).body(error);
     }
+    //세션만료 예외
+    @ExceptionHandler(SessionExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleSessionExpired(SessionExpiredException e) {
+        ErrorResponse error = new ErrorResponse(401, e.getMessage());
+        return ResponseEntity.status(401).body(error);
+    }
 
     //Bad Request처리(입력값 중복, 입력값 누락, 데이터 범위 초과)
     @ExceptionHandler(IllegalArgumentException.class)

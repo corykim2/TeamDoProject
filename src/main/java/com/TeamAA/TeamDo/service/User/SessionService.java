@@ -1,5 +1,7 @@
 package com.TeamAA.TeamDo.service.User;
 
+import com.TeamAA.TeamDo.controller.exceptionhandler.InvalidCredentialsException;
+import com.TeamAA.TeamDo.controller.exceptionhandler.SessionExpiredException;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -18,7 +20,7 @@ public class SessionService {
     public String getUserId(HttpSession session) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {
-            throw new RuntimeException("로그인 세션이 유효하지 않습니다.");
+            throw new SessionExpiredException("로그인 세션이 유효하지 않습니다.");
         }
         return userId;
     }
