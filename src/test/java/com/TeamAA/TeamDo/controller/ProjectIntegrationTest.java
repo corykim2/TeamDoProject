@@ -9,7 +9,7 @@ import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
 import com.TeamAA.TeamDo.repository.Team.TeamRepository;
 import com.TeamAA.TeamDo.repository.User.UserRepository;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import com.TeamAA.TeamDo.dto.Project.ProjectCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -99,7 +99,7 @@ class ProjectIntegrationTest {
         mockMvc.perform(get("/api/project/detail/by-pno/9999"))
                 // [Then] 400 Bad Request 기대 (GlobalExceptionHandler가 처리)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").exists()); // 에러 메시지가 있는지 확인
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Invalid project PNO")));
     }
 
     @Test
