@@ -60,7 +60,7 @@ public class TodoService {
     // 2. 특정 할 일 조회
     public TodoEntity getTodoById(Long todoId) {
         return todoRepository.findById(todoId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Todo가 존재하지 않습니다." ));
+                .orElseThrow(() -> new EntityNotFoundException("해당 Todo가 존재하지 않습니다." ));
     }
 
     // 3. 프로젝트별 할 일 목록 조회
@@ -79,7 +79,7 @@ public class TodoService {
 
         } catch (Exception e) {
             // 프로젝트가 존재하지 않거나(404) 등의 예외를 처리할 수 있음.
-            throw new RuntimeException("프로젝트 할 일 조회 중 오류 발생", e);
+            throw new EntityNotFoundException("프로젝트 할 일 조회 중 오류 발생", e);
         }
     }
 
@@ -93,7 +93,7 @@ public class TodoService {
     //5. 할일 삭제
     public void deleteTodo(Long todoId, UserEntity loginUser) throws IllegalAccessException {
         TodoEntity todo = todoRepository.findById(todoId)
-                .orElseThrow(() -> new RuntimeException("해당 Todo가 존재하지 않습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 Todo가 존재하지 않습니다."));
         checkCreatorAuthorization(todo, loginUser);
         todoRepository.delete(todo);
     }

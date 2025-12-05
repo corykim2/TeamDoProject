@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class TodoController {
             }
     )
     @PostMapping("/todos/registration")
-    public ResponseEntity<TodoReadResponse> createTodo(@RequestBody TodoCreateRequest requestDto,
+    public ResponseEntity<TodoReadResponse> createTodo(@Valid @RequestBody TodoCreateRequest requestDto,
                                                        @RequestAttribute("loginUser") UserEntity loginUser) {
         TodoEntity savedTodo = todoService.createTodo(requestDto, loginUser);
         TodoReadResponse responseDto = TodoReadResponse.fromEntity(savedTodo);
@@ -117,7 +118,7 @@ public class TodoController {
     @GetMapping("/todos-list/by-project/{pNo}")
     public ResponseEntity<List<TodoReadResponse>> getTodosByProject(
             @Parameter (description="프로젝트 번호")
-            @PathVariable Long pno,@RequestAttribute("loginUser") UserEntity loginUser) {
+            @PathVariable("pNo") Long pno,@RequestAttribute("loginUser") UserEntity loginUser) {
         // 1. 서비스 호출: 프로젝트에 속한 모든 할 일 조회
         List<TodoEntity> todos = todoService.getTodosByProjectEntity(pno, loginUser);
 
@@ -159,7 +160,7 @@ public class TodoController {
     public ResponseEntity<TodoReadResponse> updateTodoState(
             @Parameter(description = "할 일 ID")
             @PathVariable Long todoId,
-            @RequestBody TodoStateUpdateRequest requestDto,
+            @Valid @RequestBody TodoStateUpdateRequest requestDto,
             @RequestAttribute("loginUser") UserEntity loginUser) throws IllegalAccessException {
         String newState = requestDto.getState();
         TodoEntity updatedTodo = todoService.updateTodoState(todoId, newState,loginUser);
@@ -230,7 +231,8 @@ public class TodoController {
     public ResponseEntity<TodoReadResponse> updateTodo(
             @Parameter(description = "할 일 ID")
             @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequest UpdateRequest,@RequestAttribute("loginUser") UserEntity loginUser) throws IllegalAccessException {
+            @Valid @RequestBody TodoUpdateRequest UpdateRequest,
+            @RequestAttribute("loginUser") UserEntity loginUser) throws IllegalAccessException {
         TodoEntity updatedTodo = todoService.updateTodoFields(todoId, UpdateRequest,loginUser);
         TodoReadResponse responseDto = TodoReadResponse.fromEntity(updatedTodo);
         return ResponseEntity.ok(responseDto);
