@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = {
+        "com.TeamAA.TeamDo.controller.Todo"
+})
 public class GlobalExceptionHandler {
 
     // 1. @Valid 검증 실패 시 (400 Bad Request)
