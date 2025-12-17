@@ -1,152 +1,184 @@
 package com.TeamAA.TeamDo.controller;
 
-import com.TeamAA.TeamDo.controller.Team.TeamController;
-import com.TeamAA.TeamDo.dto.Team.MemberResponse;
 import com.TeamAA.TeamDo.dto.Team.TeamResponse;
-import com.TeamAA.TeamDo.service.Team.TeamService;
-import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.BeforeEach;
+import com.TeamAA.TeamDo.entity.Team.TeamEntity;
+import com.TeamAA.TeamDo.entity.Team.TeamParticipatingEntity;
+import com.TeamAA.TeamDo.entity.User.UserEntity;
+import com.TeamAA.TeamDo.repository.Team.TeamParticipatingRepository;
+import com.TeamAA.TeamDo.repository.Team.TeamRepository;
+import com.TeamAA.TeamDo.repository.User.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
-public class TeamControllerIntegrationTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+@ImportAutoConfiguration(
+        exclude = {
+                org.springframework.boot.autoconfigure.session.SessionAutoConfiguration.class
+        }
+)
+@Transactional
+@ActiveProfiles("test")
+class TeamControllerIntegrationTest {
 
-    @Mock
-    private TeamService teamService;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
-    private HttpSession session;
+    @Autowired
+    private UserRepository userRepository;
 
-    @InjectMocks
-    private TeamController teamController;
+    @Autowired
+    private TeamRepository teamRepository;
 
-    private final String userId = "leader";
-    private TeamResponse sampleTeam;
+    @Autowired
+    private TeamParticipatingRepository teamParticipatingRepository;
 
-    @BeforeEach
-    void setUp() {
-        sampleTeam = new TeamResponse(
-                1L,
-                "TeamA",
-                "INVITE123",
-                List.of(
-                        new MemberResponse("leader", "Leader Name"),
-                        new MemberResponse("member1", "Member Name")
-                )
+    // ================= Helper =================
+
+    private MockHttpSession loginSession(String userId) {
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("userId", userId);
+        return session;
+    }
+
+    private UserEntity createUser(String id, String name) {
+        UserEntity user = new UserEntity();
+        user.setId(id);
+        user.setEmail(id + "@test.com");
+        user.setName(name);
+        user.setPassword("1234");
+        return userRepository.save(user);
+    }
+
+    private TeamEntity createTeamEntity(String name) {
+        TeamEntity team = new TeamEntity();
+        team.setName(name);
+        return teamRepository.save(team);
+    }
+
+    private TeamResponse createTeamViaService(String name, UserEntity leader) {
+        // 팀 엔티티 생성
+        TeamEntity team = createTeamEntity(name);
+
+        // 팀장 참여 등록
+        TeamParticipatingEntity participation = new TeamParticipatingEntity();
+        participation.setTeamEntity(team);
+        participation.setUserEntity(leader);
+        teamParticipatingRepository.save(participation);
+
+        // TeamResponse DTO 반환
+        return new TeamResponse(
+                team.getId(),
+                team.getName(),
+                team.getInviteCode(),
+                List.of() // 테스트용이므로 빈 리스트
         );
     }
 
-    // ---------------------------
-    // 팀 생성
-    // ---------------------------
+    // ================= Tests =================
+
     @Test
-    void 팀생성_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
-        when(teamService.createTeam(eq("TeamA"), eq(userId))).thenReturn(sampleTeam);
+    @DisplayName("1. 팀 생성 성공")
+    void createTeamSuccess() throws Exception {
+        UserEntity leader = createUser("leader1", "팀장");
 
-        ResponseEntity<?> response = teamController.createTeam("TeamA", session);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(sampleTeam, response.getBody());
+        MockHttpSession session = loginSession(leader.getId());
+        mockMvc.perform(post("/api/teams")
+                        .param("name", "새로운팀")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("새로운팀")));
     }
 
-    // ---------------------------
-    // 내 팀 목록 조회
-    // ---------------------------
     @Test
-    void 내팀목록조회_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
-        when(teamService.getMyTeams(userId)).thenReturn(List.of(sampleTeam));
+    @DisplayName("2. 내 팀 목록 조회 성공")
+    void getMyTeamsSuccess() throws Exception {
+        UserEntity leader = createUser("leader2", "팀장2");
+        createTeamViaService("테스트팀", leader);
 
-        ResponseEntity<?> response = teamController.getMyTeams(session);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(List.of(sampleTeam), response.getBody());
+        mockMvc.perform(get("/api/teams")
+                        .session(loginSession(leader.getId())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("테스트팀"));
     }
 
-    // ---------------------------
-    // 팀 상세 조회
-    // ---------------------------
     @Test
-    void 팀상세조회_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
-        when(teamService.getTeamDetailDto(1L)).thenReturn(sampleTeam);
+    @DisplayName("3. 팀 상세 조회 성공")
+    void getTeamDetailSuccess() throws Exception {
+        // 1. 팀장 유저 생성
+        UserEntity leader = createUser("leader3", "팀장3");
 
-        ResponseEntity<?> response = teamController.getTeamDetail(1L, session);
+        // 2. 팀 생성 및 팀장 참여 등록
+        TeamResponse team = createTeamViaService("테스트팀3", leader);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(sampleTeam, response.getBody());
+        // 3. 세션 생성
+        MockHttpSession session = loginSession(leader.getId());
+
+        // 4. 요청 수행
+        mockMvc.perform(get("/api/teams/" + team.id())
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("테스트팀3"))
+                .andExpect(jsonPath("$.inviteCode").value(team.inviteCode()));
     }
 
-    // ---------------------------
-    // 초대코드로 팀 참가
-    // ---------------------------
     @Test
-    void 초대코드참가_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
+    @DisplayName("4. 초대코드로 팀 참가 성공")
+    void joinTeamByInviteCodeSuccess() throws Exception {
+        UserEntity leader = createUser("leader4", "팀장4");
+        UserEntity member = createUser("member1", "팀원1");
+        TeamResponse team = createTeamViaService("테스트팀4", leader);
 
-        // void 메서드 joinTeamByInviteCode mocking
-        doAnswer(invocation -> null).when(teamService).joinTeamByInviteCode(userId, "INVITE123");
-
-        ResponseEntity<?> response = teamController.joinTeam("INVITE123", session);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("팀 참가 완료", response.getBody());
-
-        verify(teamService, times(1)).joinTeamByInviteCode(userId, "INVITE123");
+        mockMvc.perform(post("/api/teams/join/by-invite-code")
+                        .param("inviteCode", team.inviteCode())
+                        .session(loginSession(member.getId())))
+                .andExpect(status().isOk())
+                .andExpect(content().string("팀 참가 완료"));
     }
 
-    // ---------------------------
-    // 초대코드 재발급
-    // ---------------------------
     @Test
-    void 초대코드재발급_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
-        when(teamService.regenerateInviteCode(1L, userId)).thenReturn("NEWCODE123");
+    @DisplayName("5. 팀 나가기 성공")
+    void leaveTeamSuccess() throws Exception {
+        UserEntity leader = createUser("leader5", "팀장5");
+        UserEntity member = createUser("member5", "팀원5");
+        TeamResponse team = createTeamViaService("테스트팀5", leader);
 
-        ResponseEntity<?> response = teamController.regenerateInviteCode(1L, session);
+        // 팀원 참여 등록
+        TeamParticipatingEntity participation = new TeamParticipatingEntity();
+        participation.setTeamEntity(teamRepository.getReferenceById(team.id()));
+        participation.setUserEntity(member);
+        teamParticipatingRepository.save(participation);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("새 초대코드 : NEWCODE123", response.getBody());
+        mockMvc.perform(delete("/api/teams/" + team.id() + "/leave")
+                        .session(loginSession(member.getId())))
+                .andExpect(status().isOk())
+                .andExpect(content().string("팀에서 나갔습니다."));
     }
 
-    // ---------------------------
-    // 팀 나가기 (팀원)
-    // ---------------------------
     @Test
-    void 팀나가기_성공() {
-        when(session.getAttribute("userId")).thenReturn(userId);
-        doAnswer(invocation -> null).when(teamService).leaveTeam(userId, 1L);
+    @DisplayName("6. 초대코드 재발급 성공 (팀장)")
+    void regenerateInviteCodeSuccess() throws Exception {
+        UserEntity leader = createUser("leader6", "팀장6");
+        TeamResponse team = createTeamViaService("테스트팀6", leader);
 
-        ResponseEntity<?> response = teamController.leaveTeam(1L, session);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("팀에서 나갔습니다.", response.getBody());
-    }
-
-    // ---------------------------
-    // 인증 실패 테스트
-    // ---------------------------
-    @Test
-    void 인증없음_테스트() {
-        when(session.getAttribute("userId")).thenReturn(null);
-
-        assertEquals(401, teamController.createTeam("TeamA", session).getStatusCodeValue());
-        assertEquals(401, teamController.getMyTeams(session).getStatusCodeValue());
-        assertEquals(401, teamController.getTeamDetail(1L, session).getStatusCodeValue());
-        assertEquals(401, teamController.joinTeam("INVITE123", session).getStatusCodeValue());
-        assertEquals(401, teamController.regenerateInviteCode(1L, session).getStatusCodeValue());
-        assertEquals(401, teamController.leaveTeam(1L, session).getStatusCodeValue());
+        mockMvc.perform(put("/api/teams/" + team.id() + "/invite-code")
+                        .session(loginSession(leader.getId())))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("새 초대코드")));
     }
 }
