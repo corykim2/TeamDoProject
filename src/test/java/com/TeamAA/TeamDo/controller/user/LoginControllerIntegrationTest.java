@@ -146,6 +146,7 @@ class LoginControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("아이디를 입력해주세요."));
         ;
 
     }
@@ -165,6 +166,7 @@ class LoginControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."));
         ;
     }
 

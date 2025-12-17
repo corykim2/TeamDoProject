@@ -140,7 +140,7 @@ class SignupControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-        //.andExpect(jsonPath("$.message").value("아이디를 입력해주세요."))
+                .andExpect(jsonPath("$.message").value("아이디는 6자리 이상, 30자리 미만으로 입력해야 합니다."))
         ;
     }
 
@@ -161,7 +161,7 @@ class SignupControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-        //.andExpect(jsonPath("$.message").value("이메일을 입력해주세요."))
+                .andExpect(jsonPath("$.message").value("이메일은 30자리 미만으로 입력해야 합니다."))
         ;
     }
 
@@ -182,7 +182,7 @@ class SignupControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-        //.andExpect(jsonPath("$.message").value("비밀번호를 입력해주세요."))
+                .andExpect(jsonPath("$.message").value("비밀번호는 5자리 이상, 16자리 미만으로 입력해야 합니다."))
         ;
     }
 
@@ -203,7 +203,7 @@ class SignupControllerIntegrationTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-        //.andExpect(jsonPath("$.message").value("이름을 입력해주세요."))
+                .andExpect(jsonPath("$.message").value("올바른 이름을 입력해주세요."))
         ;
     }
 

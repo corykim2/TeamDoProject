@@ -5,6 +5,8 @@ import com.TeamAA.TeamDo.dto.User.SignupRequest;
 import com.TeamAA.TeamDo.dto.User.SignupResponse;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.service.User.SignupService;
+import com.TeamAA.TeamDo.validation.LoginValidationSequence;
+import com.TeamAA.TeamDo.validation.SignupValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "유저관리", description = "유저관리 엔드포인트")
@@ -100,7 +103,7 @@ public class SignupController {
                     ))
     })
     @PostMapping("")
-    public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
+    public ResponseEntity<SignupResponse> signup(@Validated(SignupValidationSequence.class) @RequestBody SignupRequest request) {
         UserEntity user = signupService.signup(request);
         SignupResponse response = new SignupResponse(user.getId(), "회원가입 성공");
         return ResponseEntity.ok(response);

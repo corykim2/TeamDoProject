@@ -5,6 +5,7 @@ import com.TeamAA.TeamDo.dto.User.LoginRequest;
 import com.TeamAA.TeamDo.dto.User.LoginResponse;
 import com.TeamAA.TeamDo.entity.User.UserEntity;
 import com.TeamAA.TeamDo.service.User.LoginService;
+import com.TeamAA.TeamDo.validation.LoginValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "유저관리", description = "유저관리 엔드포인트")
@@ -89,7 +91,7 @@ public class LoginController {
     })
     // 로그인
     @PostMapping("")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@Validated(LoginValidationSequence.class) @RequestBody LoginRequest request, HttpSession session) {
         UserEntity user = loginService.login(request);
         session.setAttribute("userId", user.getId()); //세션생성 및 아이디 매칭
         LoginResponse response = new LoginResponse("로그인완료");
